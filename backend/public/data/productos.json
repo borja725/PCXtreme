@@ -1,0 +1,50 @@
+[
+    {
+    "nombre": "AMD Ryzen 7 7800x3d",
+    "precio": "446.89€",
+    "stock": 52,
+    "descripcion": "El AMD Ryzen 7 7800x3d es un procesador de 12 núcleos y 24 hilos, con una frecuencia base de 3.8 GHz y una frecuencia turbo de 5.8 GHz. Tiene 32 MB de cache L3 y soporta DDR5.",
+    "imageurl": "https://thumb.pccomponentes.com/w-530-530/articles/1066/10665103/1498-amd-ryzen-7-7800x3d-42-ghz-5-ghz-opiniones.jpg",
+    "categoria": "Procesador"
+    },
+    {
+    "nombre": "AMD Ryzen 5 5600",
+    "precio": "136.69€",
+    "stock": 64,
+    "descripcion": "El AMD Ryzen 5 5600 es un procesador de 6 núcleos y 12 hilos, con una frecuencia base de 3.7 GHz y una frecuencia turbo de 4.7 GHz. Tiene 32 MB de cache L3 y soporta DDR4/DDR5.",
+    "imageurl": "https://thumb.pccomponentes.com/w-530-530/articles/1020/10204429/115-amd-ryzen-5-5600-35ghz-box-mejor-precio.jpg",
+    "categoria": "Procesador"
+    },
+    {
+    "nombre": "AMD Ryzen 7 7700X",
+    "precio": "167.29€",
+    "stock": 32,
+    "descripcion": "El AMD Ryzen 7 7700X es un procesador de 8 núcleos y 16 hilos, con una frecuencia base de 3.4 GHz y una frecuencia turbo de 4.6 GHz. Tiene 128 MB de cache L3 y soporta DDR4/DDR5.",
+    "imageurl": "https://thumb.pccomponentes.com/w-530-530/articles/1057/10570011/188-amd-ryzen-7-7700x-45-ghz-box-sin-ventilador-comprar.jpg",
+    "categoria": "Procesador"
+    },
+    {
+    "nombre": "AMD Ryzen 7 5700X",
+    "precio": "362.79€",
+    "stock": 16,
+    "descripcion": "El AMD Ryzen 7 5700X es un procesador de 8 núcleos y 16 hilos, con una frecuencia base de 3.4 GHz y una frecuencia turbo de 4.6 GHz. Tiene 128 MB de cache L3 y soporta DDR4/DDR5.",
+    "imageurl": "https://thumb.pccomponentes.com/w-530-530/articles/1020/10204428/1108-amd-ryzen-7-5700x-34ghz-box.jpg",
+    "categoria": "Procesador"
+    },
+    {
+    "nombre": "Intel Core i7-14700K",
+    "precio": "446.89€",
+    "stock": 8,
+    "descripcion": "El Intel Core i7-14700K es un procesador de 16 núcleos y 24 hilos, con una frecuencia base de 3.8 GHz y una frecuencia turbo de 5.8 GHz. Tiene 24 MB de cache L3 y soporta DDR5.",
+    "imageurl": "https://thumb.pccomponentes.com/w-530-530/articles/1077/10779171/1341-intel-core-i7-14700k-34-56ghz-box.jpg",
+    "categoria": "Procesador"
+    },
+    {
+    "nombre": "Intel Core Ultra 7 265K",
+    "precio": "299.99€",
+    "stock": 20,
+    "descripcion": "El Intel Core Ultra 7 265K es un procesador de 20 núcleos y 24 hilos, con una frecuencia base de 4.6 GHz y una frecuencia turbo de 5.5 GHz. Tiene 12 MB de cache L3 y soporta DDR5.",
+    "imageurl": "//thumb.pccomponentes.com/w-530-530/articles/1086/10860621/1628-intel-core-ultra-7-265k-33-55ghz-box.jpg",
+    "categoria": "Procesador"
+    }
+]
