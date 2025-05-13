@@ -31,7 +31,7 @@ class ProductoController extends AbstractController
         $producto->setPrecio($data['precio']);
         $producto->setStock($data['stock']);
         $producto->setDescripcion($data['descripcion']);
-        $producto->setImagenUrl($data['imagenUrl']);
+        $producto->setImagenUrl($data['imatgeurl']);
         $producto->setCategoria($data['categoria']);
         $em->persist($producto);
         $em->flush();
