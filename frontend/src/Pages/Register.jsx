@@ -1,17 +1,17 @@
-import React from 'react';
-import { Box, Button, TextField, Typography, Paper, Link, Divider } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import styles from './loginCard.module.css';
 import { useNavigate } from 'react-router-dom';
-import CheckIcon from '@mui/icons-material/Check';
 const logoUrl = "../../public/logo.png";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
-  const [success, setSuccess] = React.useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,94 +39,73 @@ export default function Register() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', width: '100vw', display: 'flex', bgcolor: 'rgb(243,243,243)' }}>
-      {/* Panel izquierdo: branding y ventajas */}
-      <Box
-        sx={{
-          width: { xs: '0', md: '40%' },
-          minWidth: 320,
-          display: { xs: 'none', md: 'flex' },
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'linear-gradient(135deg, #1976d2 0%,rgb(0, 0, 0) 100%)',
-          color: '#fff',
-          p: 6,
-        }}
-      >
-        <img src={logoUrl} alt="PC Xtreme" style={{ width: 100, scale: 5, marginBottom: 80, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.10))' }} />
-        <Typography variant="h4" sx={{ fontWeight: 700, letterSpacing: 1 }}>
-          ¡Crea tu cuenta gratis!
-        </Typography>
-        <Box component="ul" sx={{ pl: 2, fontSize: 24, lineHeight: 2, listStyleType: 'none' }}>
-          <li style={{ alignItems: 'center', justifyContent: 'center' }}><CheckIcon sx={{ bgcolor: 'rgba(255,255,255,0.8)', borderRadius: 10, color: '#1976d2', mr: 2 }} /> Accede a ofertas exclusivas y personalizadas.</li>
-          <li style={{ alignItems: 'center', justifyContent: 'center' }}><CheckIcon sx={{ bgcolor: 'rgba(255,255,255,0.8)', borderRadius: 10, color: '#1976d2', mr: 2 }} />Consulta tu historial de compras.</li>
-          <li style={{ alignItems: 'center', justifyContent: 'center' }}><CheckIcon sx={{ bgcolor: 'rgba(255,255,255,0.8)', borderRadius: 10, color: '#1976d2', mr: 2 }} /> Accede a compra de productos.</li>
-          <li style={{ alignItems: 'center', justifyContent: 'center', height: 24}}><CheckIcon sx={{ bgcolor: 'rgba(255,255,255,0.8)', borderRadius: 10, color: '#1976d2', mr: 2 }} />Guarda tus configuraciones y listas.</li>
-        </Box>
-      </Box>
-      {/* Panel derecho: formulario */}
-      <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bgcolor: '#fff',
-        }}
-      >
-        <Paper elevation={3} sx={{ p: { xs: 3, md: 6 }, borderRadius: 3, minWidth: 340, maxWidth: 400, width: '100%' }}>
-          <Typography variant="h5" sx={{ mb: 2, color: '#1976d2', fontWeight: 700 }}>
-            Crear cuenta
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Usuario"
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              required
-            />
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
-            <TextField
-              label="Contraseña"
-              type="password"
-              variant="outlined"
-              fullWidth
-              sx={{ mb: 2 }}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-            />
-            {error && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
-            {success && <Typography color="success.main" sx={{ mb: 2 }}>{success}</Typography>}
-            <Button type="submit" variant="contained" fullWidth sx={{ mt: 1, bgcolor: '#1976d2', fontWeight: 700, ':hover': { bgcolor: '#1251a3' } }} disabled={loading}>
-              {loading ? "Cargando..." : "Registrarse"}
-            </Button>
-          </form>
-          <Divider sx={{ my: 3 }}>o</Divider>
-          <Button variant="outlined" fullWidth sx={{ mb: 2, borderColor: '#ff6600', color: '#ff6600', fontWeight: 700, ':hover': { bgcolor: '#fff4e6', borderColor: '#ff6600' } }}>
-            Regístrate con Google
-          </Button>
-          <Typography sx={{ mt: 2, fontSize: 14, textAlign: 'center' }}>
-            ¿Ya tienes cuenta?
-            <Link href="#" onClick={() => navigate('/login')} sx={{ color: '#1976d2', fontWeight: 600, ml: 1 }}>
-              Inicia sesión
-            </Link>
-          </Typography>
-        </Paper>
-      </Box>
-    </Box>
+    <Container fluid className="min-vh-100 p-0" style={{background: '#f3f3f3'}}>
+      <Row className="g-0 min-vh-100">
+        <Col md={5} className="d-none d-md-flex flex-column align-items-center justify-content-center" style={{background: 'linear-gradient(135deg, #1976d2 0%, rgb(0,0,0) 100%)', color: '#fff', minHeight: '100vh', padding: '48px 0'}}>
+          <button
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+            onClick={() => navigate('/')}
+          >
+            <img src={logoUrl} alt="PC Xtreme" style={{ width: 60, marginBottom: 60, scale: 8, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.10))' }} />
+          </button>
+          <h2 className="fw-bold mb-3" style={{letterSpacing: 1}}>¡Crea tu cuenta gratis!</h2>
+          <ul className="list-unstyled" style={{fontSize: 22, lineHeight: 2}}>
+            <li>✔ Accede a ofertas exclusivas y personalizadas.</li>
+            <li>✔ Consulta tu historial de compras.</li>
+            <li>✔ Accede a compra de productos.</li>
+            <li>✔ Guarda tus configuraciones y listas.</li>
+          </ul>
+        </Col>
+        <Col xs={12} md={7} className="d-flex align-items-center justify-content-center" style={{minHeight: '100vh', background: '#fff'}}>
+          <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{maxWidth: 400, borderRadius: 16}}>
+            <h4 className="mb-3 text-primary fw-bold">Crear cuenta</h4>
+            {error && <Alert variant="danger">{error}</Alert>}
+            {success && <Alert variant="success">{success}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="registerUsername">
+                <Form.Label>Usuario</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  required
+                  placeholder="Introduce tu usuario"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="registerEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  placeholder="Introduce tu email"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="registerPassword">
+                <Form.Label>Contraseña</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  placeholder="Introduce tu contraseña"
+                />
+              </Form.Group>
+              <Button type="submit" variant="primary" className="w-100 fw-bold mb-2" disabled={loading}>
+                {loading ? "Cargando..." : "Registrarse"}
+              </Button>
+            </Form>
+            <hr />
+            <Button variant="outline-warning" className="w-100 mb-2 fw-bold">Regístrate con Google</Button>
+            <div className="text-center mt-2">
+              ¿Ya tienes cuenta?
+              <Button variant="link" className="p-0 ms-1 fw-semibold text-primary" onClick={() => navigate('/login')}>Inicia sesión</Button>
+            </div>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

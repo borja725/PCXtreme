@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -13,26 +13,50 @@ import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
-import { useState } from 'react';
+import { getUserName, getToken } from '../../utils/auth';
   
 const logoUrl = "../../public/logo.png"; // Puedes usar tu propio logo
+import SidebarMenu from '../../components/SidebarMenu';
 
 function MainHeader() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [category, setCategory] = useState("all");
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [userName, setUserName] = useState(getUserName());
+  const isLoggedIn = !!getToken();
+
+  useEffect(() => {
+    // Escucha cambios en localStorage (otras pestañas)
+    const onStorage = () => setUserName(getUserName());
+    window.addEventListener('storage', onStorage);
+    // También chequea periódicamente en este tab
+    const interval = setInterval(() => {
+      setUserName(getUserName());
+    }, 500);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <>
-      
       <AppBar position="sticky" color="inherit" elevation={0} sx={{ width: '100%', boxShadow: 'none', zIndex: 1000 }}>
         <Toolbar sx={{ justifyContent: 'space-between', width: '100%', p: 0, borderBottom: '1px solid #e0e0e0' }}>
           <Container  maxWidth="xl" disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 84 }}>
-            <IconButton edge="start" color="inherit" aria-label="menu">
+            <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setSidebarOpen(true)}>
               <MenuIcon />
             </IconButton>
+            <SidebarMenu show={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <Box sx={{ display: 'flex', width: '17%' , justifyContent: 'center'}}>
-              <img style={{ width: 10, height: 10, scale: 20}} src={logoUrl} alt="PC Xtreme"/>
+              <button
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                onClick={() => navigate('/')}
+              >
+                <img style={{ width: 10, height: 10, scale: 20}} src={logoUrl} alt="PC Xtreme"/>
+              </button>
             </Box>
             <Paper
               component="form"
@@ -57,7 +81,9 @@ function MainHeader() {
             </Paper>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <IconButton color="inherit" onClick={() => {
-                if (location.pathname === '/login') {
+                if (isLoggedIn) {
+                  navigate('/profile');
+                } else if (location.pathname === '/login') {
                   navigate('/register');
                 } else if (location.pathname === '/register') {
                   navigate('/login');
@@ -67,12 +93,39 @@ function MainHeader() {
               }}>
                 <AccountCircleIcon />
               </IconButton>
-              <IconButton color="inherit">
+              {isLoggedIn && (
+                <button
+                  onClick={() => navigate('/profile')}
+                  style={{
+                    background: '#1976d2',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: 6,
+                    padding: '6px 20px',
+                    fontWeight: 600,
+                    fontSize: 16,
+                    cursor: 'pointer',
+                    marginLeft: 8
+                  }}
+                >
+                  Cuenta
+                </button>
+              )}
+              <IconButton
+                size="large"
+                edge="end"
+                color="inherit"
+                aria-label="cart"
+                sx={{ ml: 1 }}
+                onClick={() => {
+                  if (!isLoggedIn) { navigate('/login'); return; }
+                  navigate('/cart');
+                }}
+              >
                 <Badge badgeContent={0} color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
-             
             </Box>
           </Container>
         </Toolbar>

@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box'; // Para padding y centrado
-import Container from '@mui/material/Container';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import styles from './ListaProductos.module.css';
 
 function ListaProductos() {
   const [productos, setProductos] = useState([]);
+  const [loadingAdd, setLoadingAdd] = useState({});
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/productos')
-      .then(res => {
+    .then(res => {
         if (Array.isArray(res.data)) {
           setProductos(res.data);
         } else {
@@ -29,78 +25,96 @@ function ListaProductos() {
   }, []);
 
   return (
-    <Box sx={{ flexGrow: 1, padding: 3, bgcolor: 'rgb(243, 243, 243)', minHeight: '100vh' }}>
-      
-      <Container maxWidth="xl" disableGutters>
-      <Box sx={{ padding: 3 }}>
-        <Card sx={{ p: 2, alignItems: 'center', justifyContent: 'center', borderRadius: 2, boxShadow: 'none', width: 'fit-content'}}>
-          <Typography variant="h5" component="h4" sx={{ color: '#1976d2', fontWeight: 600, letterSpacing: 1 }}>
-            !Nuestros Procesadores Más Vendidos¡
-          </Typography>
-        </Card>
-        <Grid container spacing={4} justifyContent="space-between">
+      <Container style={{maxWidth: 1400, paddingLeft: 24, paddingRight: 24}}>
+        <Row className="justify-content-center mb-4">
+          <Col xs="auto">
+            <Card className="shadow-sm px-4 py-2 mb-2" style={{ borderRadius: 16, background: '#fff', border: 'none' }}>
+              <h4 className="fw-bold text-primary mb-0" style={{ letterSpacing: 1 }}>
+                ¡Nuestros Procesadores Más Vendidos!
+              </h4>
+            </Card>
+          </Col>
+        </Row>
+        {alert && (
+          <Row className="justify-content-center mb-2">
+            <Col xs={12} md={8} lg={6}>
+              <div className={`alert alert-${alert.type} fw-semibold text-center`} role="alert">
+                {alert.message}
+              </div>
+            </Col>
+          </Row>
+        )}
+        <Row className="g-4 justify-content-center">
           {productos.map((producto) => (
-            <Grid item key={producto.id} xs={6} sm={6} md={6} lg={6}>
+            <Col key={producto.id} xs={12} sm={6} md={4} lg={3} xl={2} className="d-flex align-items-stretch justify-content-center">
               <Card
-                sx={{
-                  mt: 2,
-                  maxWidth: 345,
-                  width: 200,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  background: '#fff',
-                  border: '1px solid rgb(243, 243, 243)',
-                  borderRadius: 2,
-                  boxShadow: 'none',
-                  transition: 'box-shadow 0.3s, transform 0.3s',
-                  '&:hover': {
-                    boxShadow: 'none',
-                    transform: 'translateY(-4px) scale(1.03)',
-                  },
-                }}
+                className={`shadow-sm mb-3 w-100 ${styles.productCardAnim}`}
+                style={{ maxWidth: 280, borderRadius: 16, border: '1px solid #f3f3f3', cursor: 'pointer', background: '#fff' }}
+                onClick={() => console.log("Producto clickeado:", producto.nombre)}
               >
-                <CardActionArea onClick={() => console.log("Producto clickeado:", producto.nombre)}>
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    image={producto.imatgeurl || 'https://via.placeholder.com/300x200.png?text=No+Image'}
-                    alt={producto.nombre}
-                    sx={{ objectFit: 'contain', p: 1, borderRadius: 2 }}
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h6" component="div" sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        minHeight: '3em',
-                        fontWeight: 700,
-                        color: '#111827',
-                        letterSpacing: 0.5
-                    }}>
-                      {producto.nombre || 'Nombre no disponible'}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 500 }}>
-                      Categoría: {producto.categoria || 'N/A'}
-                    </Typography>
-                    <Typography variant="h4" component="p" sx={{ mt: 1, fontWeight: 900, color: '#1976d2', letterSpacing: 1 }}>
-                      {typeof producto.precio === 'number' ? `${producto.precio.toFixed(2)}€` : 'Precio no disponible'}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: producto.stock > 0 ? '#2ecc40' : '#e53935', fontWeight: 600, mt: 1 }}>
-                      Stock: {producto.stock > 0 ? `${producto.stock} unidades` : 'Agotado'}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
+                <Card.Img
+                  variant="top"
+                  src={producto.imatgeurl || 'https://via.placeholder.com/300x200.png?text=No+Image'}
+                  alt={producto.nombre}
+                  style={{ height: 180, objectFit: 'contain', borderRadius: '16px 16px 0 0', padding: 8, background: '#f6f6f6' }}
+                />
+                <Card.Body className="d-flex flex-column">
+                  <Card.Title as="h6" className="fw-bold mb-1" style={{ minHeight: '3em', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', letterSpacing: 0.5, color: '#111827' }}>
+                    {producto.nombre || 'Nombre no disponible'}
+                  </Card.Title>
+                  <div className="mb-1" style={{ color: '#1976d2', fontWeight: 500, fontSize: 15 }}>
+                    Categoría: {producto.categoria || 'N/A'}
+                  </div>
+                  <div className="mb-1" style={{ fontWeight: 900, color: '#1976d2', fontSize: 22, letterSpacing: 1 }}>
+                    {typeof producto.precio === 'number' ? `${producto.precio.toFixed(2)}€` : 'Precio no disponible'}
+                  </div>
+                  <div className="mb-2" style={{ color: producto.stock > 0 ? '#2ecc40' : '#e53935', fontWeight: 600, fontSize: 15 }}>
+                    Stock: {producto.stock > 0 ? `${producto.stock} unidades` : 'Agotado'}
+                  </div>
+                  <Button 
+                    variant="outline-primary" 
+                    size="sm" 
+                    className="mt-auto fw-bold" 
+                    disabled={producto.stock <= 0 || loadingAdd[producto.id]} 
+                    style={{ borderRadius: 8 }}
+                    onClick={async () => {
+                      setLoadingAdd(prev => ({...prev, [producto.id]: true}));
+                      try {
+                        const token = localStorage.getItem('jwt');
+                        const headers = { 'Content-Type': 'application/json' };
+                        if (token) {
+                          headers['Authorization'] = `Bearer ${token}`;
+                        }
+                        const res = await fetch(`http://localhost:8000/api/cart/add`, {
+                          method: 'POST',
+                          headers,
+                          credentials: 'include', // Importante para la sesión
+                          body: JSON.stringify({ productId: producto.id, qty: 1 })
+                        });
+                        const data = await res.json();
+                        if (!res.ok) {
+                          setAlert({ type: 'danger', message: data.error || 'No se pudo añadir al carrito.' });
+                        } else {
+                          setAlert({ type: 'success', message: data.message || '¡Producto añadido al carrito!' });
+                        }
+                      } catch (err) {
+                        setAlert({ type: 'danger', message: 'Error de red al añadir al carrito.' });
+                      } finally {
+                        setLoadingAdd(prev => ({...prev, [producto.id]: false}));
+                        setTimeout(() => setAlert(null), 2500);
+                      }
+                    }}
+                  >
+                    {loadingAdd && loadingAdd[producto.id] ? <span className="spinner-border spinner-border-sm me-2" /> : null}
+                    {producto.stock > 0 ? 'Añadir al carrito' : 'Sin stock'}
+                  </Button>
+                </Card.Body>
               </Card>
-            </Grid>
+            </Col>
           ))}
-        </Grid>
-      </Box>
+        </Row>
       </Container>
-    </Box>
-  );
+    );
 }
 
 export default ListaProductos;

@@ -14,24 +14,42 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         login:
-            pattern: ^/api/login
-            stateless: true
+            pattern: ^/api/login$
+            stateless: false
+            security: false
+            provider: app_user_provider
             json_login:
                 check_path: /api/login
-                username_path: usernameOrEmail
+                username_path: username
                 password_path: password
-                success_handler: null
-                failure_handler: null
         register:
             pattern: ^/api/register
+            stateless: true
+            security: false
+        productos_publicos:
+            pattern: ^/api/productos
+            stateless: true
+            security: false
+        change_password:
+            pattern: ^/api/change-password$
+            stateless: true
+            security: false
+        profile:
+            pattern: ^/api/profile$
+            stateless: true
+            security: false
+        carrito:
+            pattern: ^/api/cart
             stateless: true
             security: false
         api:
             pattern: ^/api/
             stateless: true
+            provider: app_user_provider
             jwt: ~
 
     access_control:
         - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/productos, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }

@@ -6,6 +6,9 @@ import PromoBanner from '../components/PromoBanner/PromoBanner';
 import CategoriasMenu from '../components/CategoriasMenu/CategoriasMenu';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
+import Profile from '../Pages/Profile';
+import ChangePassword from '../Pages/ChangePassword';
+import CartPage from '../Pages/CartPage';
 
 function AppContent() {
   const location = useLocation();
@@ -23,6 +26,9 @@ function AppContent() {
         } />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </div>
   );

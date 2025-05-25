@@ -8,6 +8,7 @@ import TvIcon from '@mui/icons-material/Tv';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import DevicesOtherIcon from '@mui/icons-material/DevicesOther';
+import { Container } from 'react-bootstrap';
 
 const categorias = [
   { icon: <ComputerIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Ordenadores' },
@@ -22,6 +23,7 @@ const categorias = [
 
 export default function CategoriasMenu() {
   return (
+    <Container maxWidth="xl" disableGutters>
     <Box sx={{ width: '100%', py: 3, bgcolor: '#fff', mb: 4 }}>
       <Grid container spacing={3} justifyContent="center">
         {categorias.map((cat, i) => (
@@ -39,8 +41,8 @@ export default function CategoriasMenu() {
                 cursor: 'pointer',
                 width: 130,
                 '&:hover': {
-                  border: '2px solid #111827',
                   boxShadow: '0 4px 24px 0 rgba(25,118,210,0.15)',
+                  scale: 1.1,
                 },
               }}
             >
@@ -53,5 +55,6 @@ export default function CategoriasMenu() {
         ))}
       </Grid>
     </Box>
+    </Container>
   );
 }
