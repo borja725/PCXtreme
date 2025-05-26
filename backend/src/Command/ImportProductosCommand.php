@@ -44,6 +44,9 @@ class ImportProductosCommand extends Command
             $producto->setDescripcion($dato['descripcion']);
             $producto->setImatgeurl($dato['imatgeurl']);
             $producto->setCategoria($dato['categoria']);
+            if (isset($dato['subcategoria'])) {
+                $producto->setSubcategoria($dato['subcategoria']);
+            }
 
             $this->em->persist($producto);
         }

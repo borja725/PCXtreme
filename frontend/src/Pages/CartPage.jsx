@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useCart } from '../components/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Alert, Spinner } from 'react-bootstrap';
 import { getToken } from '../utils/auth';
-import CheckoutModal from '../components/CheckoutModal';
+import CheckoutModal from '../components/CheckoutModal/CheckoutModal';
 
 export default function CartPage() {
+  const { setCart: setCartContext } = useCart();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -39,7 +41,10 @@ export default function CartPage() {
       body: JSON.stringify({ productId })
     })
       .then(res => res.json())
-      .then(data => setCart(data));
+      .then(data => {
+        setCart(data);
+        setCartContext(data); 
+      });
   };
 
   const handleClear = () => {
@@ -48,7 +53,10 @@ export default function CartPage() {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setCart(data));
+      .then(data => {
+        setCart(data);
+        setCartContext(data); 
+      });
   };
 
   const handleQty = (productId, qty) => {
@@ -58,7 +66,10 @@ export default function CartPage() {
       body: JSON.stringify({ productId, qty })
     })
       .then(res => res.json())
-      .then(data => setCart(data));
+      .then(data => {
+        setCart(data);
+        setCartContext(data); 
+      });
   };
 
   if (!token) return null;

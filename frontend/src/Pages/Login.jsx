@@ -50,51 +50,51 @@ export default function Login() {
           </button>
           <h2 className="fw-bold mb-3" style={{letterSpacing: 1}}>¡Identifícate o crea una nueva cuenta!</h2>
           <ul className="list-unstyled" style={{fontSize: 22, lineHeight: 2}}>
-  <li>✔ Accede a ofertas exclusivas y personalizadas.</li>
-  <li>✔ Consulta tu historial de compras.</li>
-  <li>✔ Accede a compra de productos.</li>
-  <li>✔ Guarda tus configuraciones y listas.</li>
-</ul>
+            <li>✔ Accede a ofertas exclusivas y personalizadas.</li>
+            <li>✔ Consulta tu historial de compras.</li>
+            <li>✔ Accede a compra de productos.</li>
+            <li>✔ Guarda tus configuraciones y listas.</li>
+          </ul>
         </Col>
         <Col xs={12} md={7} className="d-flex align-items-center justify-content-center" style={{minHeight: '100vh', background: '#fff'}}>
-  <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{maxWidth: 400, borderRadius: 16}}>
-    <h4 className="mb-3 text-primary fw-bold">Inicia sesión</h4>
-    {success && <Alert variant="success">¡Sesión iniciada correctamente!</Alert>}
-    {error && <Alert variant="danger">{error}</Alert>}
-    <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3" controlId="loginUsername">
-        <Form.Label>Usuario</Form.Label>
-        <Form.Control
-          type="text"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-          placeholder="Introduce tu usuario"
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="loginPassword">
-        <Form.Label>Contraseña</Form.Label>
-        <Form.Control
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          placeholder="Introduce tu contraseña"
-        />
-      </Form.Group>
-      <Button type="submit" variant="primary" className="w-100 fw-bold mb-2" disabled={loading}>
-        {loading ? "Cargando..." : "Acceder"}
-      </Button>
-    </Form>
-    <hr />
-    <Button variant="outline-warning" className="w-100 mb-2 fw-bold">Iniciar sesión con Google</Button>
-    <div className="text-center mt-2">
-      ¿No tienes cuenta?
-      <Button variant="link" className="p-0 ms-1 fw-semibold text-primary" onClick={() => navigate('/register')}>Regístrate</Button>
-    </div>
-  </Card>
-</Col>
-</Row>
+          <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{maxWidth: 400, borderRadius: 16}}>
+            <h4 className="mb-3 text-primary fw-bold">Inicia sesión</h4>
+            {success && <Alert variant="success">¡Sesión iniciada correctamente!</Alert>}
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="loginUsername">
+                <Form.Label>Usuario</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  required
+                  placeholder="Introduce tu usuario"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="loginPassword">
+                <Form.Label>Contraseña</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  placeholder="Introduce tu contraseña"
+                />
+              </Form.Group>
+              <Button type="submit" variant="primary" className="w-100 fw-bold mb-2" disabled={loading}>
+                {loading ? "Cargando..." : "Acceder"}
+              </Button>
+            </Form>
+            <hr />
+            <Button variant="outline-warning" className="w-100 mb-2 fw-bold">Iniciar sesión con Google</Button>
+            <div className="text-center mt-2">
+              ¿No tienes cuenta?
+              <Button variant="link" className="p-0 ms-1 fw-semibold text-primary" onClick={() => navigate('/register')}>Regístrate</Button>
+            </div>
+          </Card>
+        </Col>
+      </Row>
 </Container>
 );
 }

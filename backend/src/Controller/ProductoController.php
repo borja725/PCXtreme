@@ -15,9 +15,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductoController extends AbstractController
 {
     #[Route('', methods: ['GET'])]
-    public function index(ProductoRepository $repo, SerializerInterface $serializer): JsonResponse
+    public function index(Request $request, ProductoRepository $repo, SerializerInterface $serializer): JsonResponse
     {
-        $productos = $repo->findAll();
+        $categoria = $request->query->get('categoria');
+        $subcategoria = $request->query->get('subcategoria');
+        if ($categoria) {
+            $productos = $repo->findBy(['categoria' => $categoria]);
+        } else {
+            $productos = $repo->findAll();
+        }
+        if ($subcategoria) {
+            $productos = $repo->findBy(['subcategoria' => $subcategoria]);
+        }
         $json = $serializer->serialize($productos, 'json', ['groups' => 'producto:read']);
         return new JsonResponse($json, 200, [], true);
     }
@@ -31,8 +40,11 @@ class ProductoController extends AbstractController
         $producto->setPrecio($data['precio']);
         $producto->setStock($data['stock']);
         $producto->setDescripcion($data['descripcion']);
-        $producto->setImagenUrl($data['imatgeurl']);
+        $producto->setImatgeurl($data['imatgeurl']);
         $producto->setCategoria($data['categoria']);
+        if (isset($data['subcategoria'])) {
+            $producto->setSubcategoria($data['subcategoria']);
+        }
         $em->persist($producto);
         $em->flush();
         return $this->json(['mensaje' => 'Producto creado'], 201);

@@ -1,0 +1,13 @@
+.promo-btn {
+  background: #fff;
+  color: #1976d2;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  transition: background 0.2s, color 0.2s;
+}
+.promo-btn:hover, .promo-btn:focus {
+  background: #1976d2;
+  color: #fff;
+}

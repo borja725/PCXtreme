@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useCart } from '../../components/CartContext';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -15,10 +16,11 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import { getUserName, getToken } from '../../utils/auth';
   
-const logoUrl = "../../public/logo.png"; // Puedes usar tu propio logo
-import SidebarMenu from '../../components/SidebarMenu';
+const logoUrl = "../../public/logo.png";
+import SidebarMenu from '../../components/SidebarMenu/SidebarMenu';
 
 function MainHeader() {
+  const { cartCount } = useCart();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [category, setCategory] = useState("all");
   const navigate = useNavigate();
@@ -28,10 +30,8 @@ function MainHeader() {
   const isLoggedIn = !!getToken();
 
   useEffect(() => {
-    // Escucha cambios en localStorage (otras pestañas)
     const onStorage = () => setUserName(getUserName());
     window.addEventListener('storage', onStorage);
-    // También chequea periódicamente en este tab
     const interval = setInterval(() => {
       setUserName(getUserName());
     }, 500);
@@ -122,7 +122,7 @@ function MainHeader() {
                   navigate('/cart');
                 }}
               >
-                <Badge badgeContent={0} color="error">
+                <Badge badgeContent={cartCount} color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>

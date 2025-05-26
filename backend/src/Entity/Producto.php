@@ -40,6 +40,10 @@ class Producto
     #[Groups(['producto:read'])]
     private ?string $categoria = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['producto:read'])]
+    private ?string $subcategoria = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -114,6 +118,17 @@ class Producto
     {
         $this->categoria = $categoria;
 
+        return $this;
+    }
+
+    public function getSubcategoria(): ?string
+    {
+        return $this->subcategoria;
+    }
+
+    public function setSubcategoria(?string $subcategoria): static
+    {
+        $this->subcategoria = $subcategoria;
         return $this;
     }
 }
