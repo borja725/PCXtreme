@@ -1,5 +1,4 @@
 <?php
-// src/Command/ImportProductosCommand.php
 
 namespace App\Command;
 

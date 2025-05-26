@@ -1,60 +1,90 @@
 import React from 'react';
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import ComputerIcon from '@mui/icons-material/Computer';
-import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import TvIcon from '@mui/icons-material/Tv';
-import HeadphonesIcon from '@mui/icons-material/Headphones';
-import MonitorIcon from '@mui/icons-material/Monitor';
-import DevicesOtherIcon from '@mui/icons-material/DevicesOther';
-import { Container } from 'react-bootstrap';
+import { Container, Row, Col, Card, CardGroup } from 'react-bootstrap';
 
 const categorias = [
-  { icon: <ComputerIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Ordenadores' },
-  { icon: <LaptopChromebookIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Portátiles' },
-  { icon: <PhoneIphoneIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Smartphones' },
-  { icon: <SportsEsportsIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Videojuegos' },
-  { icon: <TvIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Televisores' },
-  { icon: <HeadphonesIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Sonido' },
-  { icon: <MonitorIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Monitores' },
-  { icon: <DevicesOtherIcon sx={{ fontSize: 40, color: '#1976d2' }} />, label: 'Periféricos' },
+  { icon: '/categorias/portatil.png', label: 'Los mejores portátiles' },
+  { icon: '/categorias/procesador.png', label: 'Componentes de PC' },
+  { icon: '/categorias/monitor.png', label: 'Monitores en tendencia' },
+  { icon: '/categorias/televisor.png', label: 'Novedades en televisores' },
+  { icon: '/categorias/smartphone.png', label: 'Estrena smartphone' },
+  { icon: '/categorias/altavoz.png', label: 'Mejores altavoces' },
 ];
 
 export default function CategoriasMenu() {
   return (
-    <Container maxWidth="xl" disableGutters>
-    <Box sx={{ width: '100%', py: 3, bgcolor: '#fff', mb: 4 }}>
-      <Grid container spacing={3} justifyContent="center">
+      <Container maxWidth="xl" className="py-4">
+        <Row className="justify-content-center g-4 align-items-start">
         {categorias.map((cat, i) => (
-          <Grid item xs={6} sm={3} md={2} lg={1.5} key={cat.label}>
-            <Paper
-              elevation={3}
-              sx={{
-                p: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                border: '2px solid #1976d2',
-                borderRadius: 3,
-                transition: 'box-shadow 0.2s, border 0.2s',
-                cursor: 'pointer',
-                width: 130,
-                '&:hover': {
-                  boxShadow: '0 4px 24px 0 rgba(25,118,210,0.15)',
-                  scale: 1.1,
-                },
-              }}
-            >
-              {cat.icon}
-              <Typography sx={{ mt: 1, fontWeight: 700, color: '#111827', fontSize: 15, textAlign: 'center' }}>
-                {cat.label}
-              </Typography>
-            </Paper>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
-    </Container>
-  );
+  <Col key={cat.label} xs={6} sm={4} md={3} lg={2} className="d-flex flex-column align-items-center">
+    <div
+      className="bg-white shadow-sm border border-3 border-primary d-flex flex-column align-items-center justify-content-center mb-2 mt-2 rounded-circle"
+      style={{
+        width: 200,
+        height: 200,
+        transition: 'transform 0.18s cubic-bezier(.4,2.2,.6,1), box-shadow 0.18s',
+        cursor: 'pointer',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+      onMouseOver={e => {
+        e.currentTarget.style.transform = 'scale(1.08)';
+        e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(25,118,210,0.18)';
+      }}
+      onMouseOut={e => {
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.boxShadow = '';
+      }}
+    >
+      <img
+        src={cat.icon}
+        alt={cat.label}
+        className="img-fluid"
+        style={{ maxWidth: 135, maxHeight: 135, objectFit: 'contain', zIndex: 2 }}
+      />
+      {i >= 3 && (
+        <div style={{
+          width: 135,
+          height: 35,
+          marginTop: -10,
+          overflow: 'hidden',
+          position: 'relative',
+          zIndex: 1,
+        }}>
+          <img
+            src={cat.icon}
+            alt=""
+            aria-hidden="true"
+            style={{
+              width: 135,
+              height: 110,
+              objectFit: 'contain',
+              transform: 'scaleY(-1)',
+              opacity: 0.15,
+              filter: 'blur(1px)',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+            }}
+          />
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: 145,
+            height:10,
+            background: 'linear-gradient(to top, rgba(255,255,255,0.9) 80%, rgba(255,255,255,0) 100%)',
+            pointerEvents: 'none',
+          }} />
+        </div>
+      )}
+    </div>
+    <span className="fw-semibold text-primary text-center px-2 mt-2" style={{ fontSize: 16, lineHeight: 1 }}>
+      {cat.label}
+    </span>
+  </Col>
+))}
+        </Row>
+        <hr className="my-5 border-primary opacity-50" />      
+      </Container>
+    );
 }

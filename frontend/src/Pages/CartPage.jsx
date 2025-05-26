@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Alert, Spinner } from 'react-bootstrap';
 import { getToken } from '../utils/auth';
+import CheckoutModal from '../components/CheckoutModal';
 
 export default function CartPage() {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showCheckout, setShowCheckout] = useState(false);
   const navigate = useNavigate();
   const token = getToken();
 
@@ -121,8 +123,13 @@ export default function CartPage() {
               <span>Impuestos incluidos</span>
               <span>✔</span>
             </div>
-            <Button variant="warning" className="w-100 mt-3 fw-bold">Realizar pedido</Button>
+            {cart && cart.items && cart.items.length > 0 && (
+              <Button variant="warning" className="w-100 mt-3 fw-bold" onClick={() => setShowCheckout(true)}>
+                Realizar pedido
+              </Button>
+            )}
           </Card>
+          <CheckoutModal show={showCheckout} onHide={() => setShowCheckout(false)} onOrderCompleted={() => { handleClear(); }} />
         </Col>
       </Row>
     </Container>

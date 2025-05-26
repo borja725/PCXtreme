@@ -5,11 +5,10 @@ import { FaLaptop, FaMicrochip, FaKeyboard, FaGamepad, FaSnowflake, FaTv, FaMobi
 import Slide from '@mui/material/Slide';
 
 const menuItems = [
-  { icon: <FaLaptop size={24} />, label: "PCs y Portátiles" },
+  { icon: <FaLaptop size={24} />, label: "Portátiles" },
   { icon: <FaMicrochip size={24} />, label: "Componentes y Software" },
   { icon: <FaKeyboard size={24} />, label: "Periféricos y Conectividad" },
   { icon: <FaGamepad size={24} />, label: "Gaming y Consolas" },
-  { icon: <FaSnowflake size={24} />, label: "Refrigeración Líquida" },
   { icon: <FaTv size={24} />, label: "Imagen y Sonido" },
   { icon: <FaMobileAlt size={24} />, label: "Smartphones y Telefonía" },
   { icon: <FaHome size={24} />, label: "ElectroHogar y Oficina" },
