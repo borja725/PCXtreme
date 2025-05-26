@@ -62,7 +62,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->password;
     }
-    // PasswordAuthenticatedUserInterface solo requiere este método, así que ya está implementado correctamente.
 
     public function setPassword(string $password): static
     {
@@ -83,7 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // Si guardas datos temporales sensibles en el usuario, límpialos aquí
+
     }
 }
 

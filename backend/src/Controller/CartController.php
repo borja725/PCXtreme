@@ -27,7 +27,6 @@ class CartController extends AbstractController
             return new JsonResponse(['error' => 'Producto no encontrado.'], Response::HTTP_NOT_FOUND);
         }
 
-        // Buscar o crear el carrito por sessionId
         $cartRepo = $em->getRepository(\App\Entity\Cart::class);
         $cart = $cartRepo->findOneBy(['sessionId' => $sessionId]);
         if (!$cart) {
@@ -36,7 +35,6 @@ class CartController extends AbstractController
             $em->persist($cart);
         }
 
-        // Buscar o crear el CartItem
         $cartItemRepo = $em->getRepository(\App\Entity\CartItem::class);
         $cartItem = $cartItemRepo->findOneBy(['cart' => $cart, 'producto' => $producto]);
         if ($cartItem) {

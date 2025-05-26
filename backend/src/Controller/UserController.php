@@ -53,7 +53,6 @@ class UserController extends AbstractController
         if (!$user) {
             return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
         }
-        // Soporta multipart/form-data y application/json
         $contentType = $request->headers->get('Content-Type');
         if ($contentType && strpos($contentType, 'application/json') === 0) {
             $data = json_decode($request->getContent(), true);
@@ -62,9 +61,7 @@ class UserController extends AbstractController
         } else {
             $name = $request->request->get('name');
             $email = $request->request->get('email');
-            // $profileImage = $request->files->get('profileImage'); // Implementar si tienes imagen
         }
-        // DEBUG: Devuelve lo que recibe el backend
         if (!$name || !$email) {
             return new JsonResponse([
                 'error' => 'Faltan campos obligatorios',
@@ -77,11 +74,9 @@ class UserController extends AbstractController
         }
         $user->setUsername($name);
         $user->setEmail($email);
-        // Si quieres guardar la imagen, implementa aquí
         $em->persist($user);
         $em->flush();
 
-        // Generar nuevo JWT con los datos actualizados
         $payload = [
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),
@@ -115,13 +110,11 @@ class UserController extends AbstractController
         return new JsonResponse([
             'name' => $user->getUsername(),
             'email' => $user->getEmail(),
-            // 'profileImage' => $user->getProfileImage(), // Descomenta si tienes imagen
         ]);
     }
     #[Route("/change-password", methods: ["POST"])]
     public function changePassword(Request $request, UserRepository $userRepo, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em)
     {
-        // Obtener token JWT del header Authorization
         $authHeader = $request->headers->get('Authorization');
         if (!$authHeader || !preg_match('/Bearer\s(.*)/', $authHeader, $matches)) {
             return new JsonResponse(['error' => 'Token no proporcionado'], 401);
@@ -132,23 +125,19 @@ class UserController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Token inválido'], 401);
         }
-        // Obtener usuario
         $user = $userRepo->find($decoded->user_id ?? 0);
         if (!$user) {
             return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
         }
-        // Obtener datos del body
         $data = json_decode($request->getContent(), true);
         $currentPassword = $data['currentPassword'] ?? null;
         $newPassword = $data['newPassword'] ?? null;
         if (!$currentPassword || !$newPassword) {
             return new JsonResponse(['error' => 'Faltan campos obligatorios'], 400);
         }
-        // Verificar contraseña actual
         if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
             return new JsonResponse(['error' => 'Contraseña actual incorrecta'], 403);
         }
-        // Cambiar contraseña
         $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
         $em->persist($user);
         $em->flush();
@@ -192,7 +181,6 @@ class UserController extends AbstractController
         if (!$user || !$passwordHasher->isPasswordValid($user, $password)) {
             return new JsonResponse(['error' => 'Credenciales inválidas'], 401);
         }
-        // JWT
         $jwt = JWT::encode([
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),
