@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../components/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, Alert, Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, Spinner } from 'react-bootstrap';
 import { getToken } from '../utils/auth';
 import CheckoutModal from '../components/CheckoutModal/CheckoutModal';
+import Container from '@mui/material/Container';
 
 export default function CartPage() {
   const { setCart: setCartContext } = useCart();
@@ -76,7 +77,7 @@ export default function CartPage() {
   if (loading) return <div className="w-100 d-flex justify-content-center align-items-center" style={{minHeight:300}}><Spinner animation="border" /></div>;
 
   return (
-    <Container className="py-4" style={{maxWidth: 1400}}>
+    <Container maxWidth="xl" disableGutters className="py-4">
       <Row>
         <Col md={8}>
           <Card className="mb-4 p-3">

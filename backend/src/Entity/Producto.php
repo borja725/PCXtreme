@@ -44,6 +44,14 @@ class Producto
     #[Groups(['producto:read'])]
     private ?string $subcategoria = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['producto:read'])]
+    private ?string $marca = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['producto:read'])]
+    private ?string $modelo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -129,6 +137,28 @@ class Producto
     public function setSubcategoria(?string $subcategoria): static
     {
         $this->subcategoria = $subcategoria;
+        return $this;
+    }
+
+    public function getMarca(): ?string
+    {
+        return $this->marca;
+    }
+
+    public function setMarca(?string $marca): static
+    {
+        $this->marca = $marca;
+        return $this;
+    }
+
+    public function getModelo(): ?string
+    {
+        return $this->modelo;
+    }
+
+    public function setModelo(?string $modelo): static
+    {
+        $this->modelo = $modelo;
         return $this;
     }
 }

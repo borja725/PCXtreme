@@ -58,7 +58,6 @@ function ListaProductos() {
 
   return (
     <>
-      {/* Carrusel de banners destacados */}
       <CarruselDestacado />
       <Container maxWidth="xl" disableGutters>
         {loading && <Spinner animation="border" />}

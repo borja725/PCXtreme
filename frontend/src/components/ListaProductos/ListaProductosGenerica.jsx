@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from '../CartContext';
 import { Row, Col, Alert, Spinner } from 'react-bootstrap';
 import { Container } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './ListaProductos.module.css';
 
 function sumarDiasLaborables(fecha, dias) {
@@ -24,6 +24,7 @@ function obtenerTextoEntrega() {
 }
 
 export default function ListaProductosGenerica({ categoria = 'PYPC', subcategoria = '', titulo = '', numProductos = 5, verMasRuta = '' }) {
+  const navigate = useNavigate();
   const { setCart } = useCart();
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,12 +109,17 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                 transition: 'box-shadow 0.22s cubic-bezier(.4,2.2,.6,1), transform 0.18s',
                 cursor: 'pointer',
               }}
+              onClick={e => {
+                // Evitar navegar si el click es en el botón Añadir
+                if (e.target.closest('button')) return;
+                navigate(`/producto/${prod.id}`);
+              }}
               onMouseOver={e => {
                 e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(25,118,210,0.12)';
                 e.currentTarget.style.transform = 'translateY(-4px) scale(1.025)';
               }}
               onMouseOut={e => {
-                e.currentTarget.style.boxShadow = '';
+                e.currentTarget.style.boxShadow = '0 2px 8px 0 rgba(0,0,0,0.08)';
                 e.currentTarget.style.transform = '';
               }}
             >

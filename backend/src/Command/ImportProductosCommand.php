@@ -47,6 +47,12 @@ class ImportProductosCommand extends Command
             if (isset($dato['subcategoria'])) {
                 $producto->setSubcategoria($dato['subcategoria']);
             }
+            if (isset($dato['marca'])) {
+                $producto->setMarca($dato['marca']);
+            }
+            if (isset($dato['modelo'])) {
+                $producto->setModelo($dato['modelo']);
+            }
 
             $this->em->persist($producto);
         }
@@ -58,6 +64,3 @@ class ImportProductosCommand extends Command
         return Command::SUCCESS;
     }
 }
-
-
-?>

@@ -11,6 +11,7 @@ import Profile from '../Pages/Profile';
 import ChangePassword from '../Pages/ChangePassword';
 import CartPage from '../Pages/CartPage';
 import ProductosPorTipo from '../Pages/ProductosPorTipo';
+import ProductoDetalle from '../Pages/ProductoDetalle';
 import FooterPCXtreme from '../components/FooterPCXtreme';
 import FooterMinimal from '../components/FooterMinimal';
 
@@ -18,16 +19,16 @@ function AppContent() {
   const location = useLocation();
   const hideHeader = location.pathname === '/login' || location.pathname === '/register';
   return (
-    <div className="App">
+    <div className="App" style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
       {!hideHeader && <MainHeader />}
-      <Routes>
+      <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+        <Routes>
         <Route path="/" element={
           <>
             <PromoBanner />
             <CategoriasMenu />
             <ListaProductos />
             <FooterPCXtreme />
-            <FooterMinimal />
           </>
         } />
         <Route path="/login" element={<Login />} />
@@ -36,7 +37,10 @@ function AppContent() {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/productos/:categoria/:subcategoria?" element={<ProductosPorTipo />} />
-      </Routes>
+        <Route path="/producto/:id" element={<ProductoDetalle />} />
+        </Routes>
+      </div>
+      <FooterMinimal />
     </div>
   );
 }

@@ -11,11 +11,10 @@ const menuItems = [
   { icon: <FaMicrochip size={24} />, label: "CPU / Procesadores", categoria: "PYPC", subcategoria: "Procesador" },
   { icon: <FaMemory size={24} />, label: "RAM / Memoria", categoria: "PYPC", subcategoria: "RAM" },
   { icon: <FaProjectDiagram size={24} />, label: "Placas base", categoria: "PYPC", subcategoria: "Placa Base" },
-  { icon: <FaHdd size={24} />, label: "Almacenamiento", categoria: "PYPC", subcategoria: "Almacenamiento" },
-  { icon: <FaPowerOff size={24} />, label: "Fuente de alimentación", categoria: "PYPC", subcategoria: "Fuente Alimentacion" },
+  { icon: <FaHdd size={24} />, label: "Almacenamiento", categoria: "PYPC", subcategoria: "SSD" },
+  { icon: <FaPowerOff size={24} />, label: "Fuente de alimentación", categoria: "PYPC", subcategoria: "Fuente de Alimentación" },
   { icon: <FaSnowflake size={24} />, label: "Refrigeración", categoria: "PYPC", subcategoria: "Refrigeracion" },
-  { icon: <FaKeyboard size={24} />, label: "Periféricos", categoria: "PYPC", subcategoria: "Perifericos" },
-  { icon: <FaCube size={24} />, label: "Cajas", categoria: "PYPC", subcategoria: "Caja" },
+  { icon: <FaCube size={24} />, label: "Cajas", categoria: "PYPC", subcategoria: "Caja de Torre" },
 ];
 
 function SidebarMenu({ show, onClose }) {

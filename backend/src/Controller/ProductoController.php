@@ -45,6 +45,12 @@ class ProductoController extends AbstractController
         if (isset($data['subcategoria'])) {
             $producto->setSubcategoria($data['subcategoria']);
         }
+        if (isset($data['marca'])) {
+            $producto->setMarca($data['marca']);
+        }
+        if (isset($data['modelo'])) {
+            $producto->setModelo($data['modelo']);
+        }
         $em->persist($producto);
         $em->flush();
         return $this->json(['mensaje' => 'Producto creado'], 201);
