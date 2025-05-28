@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Spinner, Alert, Button, Badge } from 'react-bootstrap';
-import { useCart } from '../components/CartContext';
-import ResenasProducto from '../components/ResenasProducto';
+import { useCart } from '../../components/CartContext/CartContext';
+import ResenasProducto from '../../components/Reseñas/ResenasProducto';
+
 
 export default function ProductoDetalle() {
 
-// Componente para mostrar productos aleatorios si no hay relacionados
-function RelacionadosAleatorios({ idActual }) {
+function RelacionadosAleatorios({ idActual }) { 
   const [productos, setProductos] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);

@@ -3,33 +3,33 @@ import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 import styles from './loginCard.module.css';
 import { useNavigate } from 'react-router-dom';
 const logoUrl = "../../public/logo.png";
+import { setToken } from '../../utils/auth';
 
-export default function Register() {
+export default function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setSuccess("");
     try {
-      const response = await fetch("http://localhost:8000/api/register", {
+      const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, password })
       });
       const data = await response.json();
-      if (response.ok) {
-        setSuccess("Usuario registrado correctamente. Ahora puedes iniciar sesión.");
-        setTimeout(() => navigate("/login"), 1500);
+      if (response.ok && data.token) {
+        setToken(data.token);
+        setSuccess(true);
+        setTimeout(() => navigate("/"), 1000);
       } else {
-        setError(data.error || "Error al registrar usuario");
+        setError(data.error || "Error al iniciar sesión");
       }
     } catch (err) {
       setError("No se pudo conectar con el servidor");
@@ -48,7 +48,7 @@ export default function Register() {
           >
             <img src={logoUrl} alt="PC Xtreme" style={{ width: 60, marginBottom: 60, scale: 8, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.10))' }} />
           </button>
-          <h2 className="fw-bold mb-3" style={{letterSpacing: 1}}>¡Crea tu cuenta gratis!</h2>
+          <h2 className="fw-bold mb-3" style={{letterSpacing: 1}}>¡Identifícate o crea una nueva cuenta!</h2>
           <ul className="list-unstyled" style={{fontSize: 22, lineHeight: 2}}>
             <li>✔ Accede a ofertas exclusivas y personalizadas.</li>
             <li>✔ Consulta tu historial de compras.</li>
@@ -58,11 +58,11 @@ export default function Register() {
         </Col>
         <Col xs={12} md={7} className="d-flex align-items-center justify-content-center" style={{minHeight: '100vh', background: '#fff'}}>
           <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{maxWidth: 400, borderRadius: 16}}>
-            <h4 className="mb-3 text-primary fw-bold">Crear cuenta</h4>
+            <h4 className="mb-3 text-primary fw-bold">Inicia sesión</h4>
+            {success && <Alert variant="success">¡Sesión iniciada correctamente!</Alert>}
             {error && <Alert variant="danger">{error}</Alert>}
-            {success && <Alert variant="success">{success}</Alert>}
             <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="registerUsername">
+              <Form.Group className="mb-3" controlId="loginUsername">
                 <Form.Label>Usuario</Form.Label>
                 <Form.Control
                   type="text"
@@ -72,17 +72,7 @@ export default function Register() {
                   placeholder="Introduce tu usuario"
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="registerEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  placeholder="Introduce tu email"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="registerPassword">
+              <Form.Group className="mb-3" controlId="loginPassword">
                 <Form.Label>Contraseña</Form.Label>
                 <Form.Control
                   type="password"
@@ -93,19 +83,21 @@ export default function Register() {
                 />
               </Form.Group>
               <Button type="submit" variant="primary" className="w-100 fw-bold mb-2" disabled={loading}>
-                {loading ? "Cargando..." : "Registrarse"}
+                {loading ? "Cargando..." : "Acceder"}
               </Button>
             </Form>
             <hr />
-            <Button variant="outline-warning" className="w-100 mb-2 fw-bold">Regístrate con Google</Button>
+            <Button variant="outline-warning" className="w-100 mb-2 fw-bold">Iniciar sesión con Google</Button>
             <div className="text-center mt-2">
-              ¿Ya tienes cuenta?
-              <Button variant="link" className="p-0 ms-1 fw-semibold text-primary" onClick={() => navigate('/login')}>Inicia sesión</Button>
+              ¿No tienes cuenta?
+              <Button variant="link" className="p-0 ms-1 fw-semibold text-primary" onClick={() => navigate('/register')}>Regístrate</Button>
             </div>
           </Card>
         </Col>
       </Row>
-    </Container>
-  );
+</Container>
+);
 }
+
+
 

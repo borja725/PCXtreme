@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useCart } from '../components/CartContext';
+import { useCart } from '../../components/CartContext/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Card, Button, Alert, Spinner } from 'react-bootstrap';
-import { getToken } from '../utils/auth';
-import CheckoutModal from '../components/CheckoutModal/CheckoutModal';
+import { getToken } from '../../utils/auth';
+import CheckoutModal from '../../components/CheckoutModal/CheckoutModal';
 import Container from '@mui/material/Container';
 
 export default function CartPage() {
-  const { setCart: setCartContext } = useCart();
-  const [cart, setCart] = useState(null);
+  const { cart, setCart } = useCart();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showCheckout, setShowCheckout] = useState(false);
@@ -44,7 +43,7 @@ export default function CartPage() {
       .then(res => res.json())
       .then(data => {
         setCart(data);
-        setCartContext(data); 
+         
       });
   };
 
@@ -56,7 +55,7 @@ export default function CartPage() {
       .then(res => res.json())
       .then(data => {
         setCart(data);
-        setCartContext(data); 
+         
       });
   };
 
@@ -69,7 +68,7 @@ export default function CartPage() {
       .then(res => res.json())
       .then(data => {
         setCart(data);
-        setCartContext(data); 
+         
       });
   };
 

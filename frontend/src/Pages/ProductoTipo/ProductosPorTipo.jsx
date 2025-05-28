@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Row, Col, Spinner, Alert } from "react-bootstrap";
-import FiltrosProductos from "../components/FiltrosProductos";
-import styles from '../components/ListaProductos/ListaProductos.module.css';
-import { useCart } from '../components/CartContext';
+import FiltrosProductos from "../../components/Filtros/FiltrosProductos";
+import styles from '../../components/ListaProductos/ListaProductos.module.css';
+import { useCart } from '../../components/CartContext/CartContext';
 import Container from '@mui/material/Container';
 
 function sumarDiasLaborables(fecha, dias) {

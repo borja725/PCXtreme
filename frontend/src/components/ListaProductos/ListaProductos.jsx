@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Alert, Spinner } from 'react-bootstrap';
 import { Container } from '@mui/material';
-import CarruselDestacado from '../CarruselDestacado';
+import CarruselDestacado from '../Carrusel/CarruselDestacado';
 import ListaProductosGenerica from './ListaProductosGenerica';
 import BannerDoble from '../PromoBanner/BannerDoble';
 

@@ -47,7 +47,7 @@ export default function PromoBanner() {
                 Siente la potencia de la tecnología Nvidia con nuestros productos seleccionados.
               </h4>
               <div className="d-flex flex-row align-items-center justify-content-between mt-3" style={{gap: 16}}>
-                <a href="#" className="btn btn-lg promo-btn-glass" style={{
+                <a href="/productos/Nvidia" className="btn btn-lg promo-btn-glass" style={{
                   fontWeight: 700,
                   fontSize: '1.09rem',
                   padding: '12px 30px',
@@ -95,7 +95,7 @@ export default function PromoBanner() {
                 Descubre la potencia y eficiencia de AMD en nuestra tienda.
               </h4>
               <div className="d-flex flex-row align-items-center justify-content-between mt-3" style={{gap: 16}}>
-                <a href="#" className="btn btn-lg promo-btn-glass-amd" style={{
+                <a href="/productos/PYPC" className="btn btn-lg promo-btn-glass-amd" style={{
                   fontWeight: 700,
                   fontSize: '1.09rem',
                   padding: '12px 30px',

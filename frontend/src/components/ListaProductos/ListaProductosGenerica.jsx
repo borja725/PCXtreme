@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useCart } from '../CartContext';
-import { Row, Col, Alert, Spinner } from 'react-bootstrap';
-import { Container } from '@mui/material';
+import { useCart } from '../CartContext/CartContext';
+import { Row, Col, Alert, Spinner, Button } from 'react-bootstrap';
+import { Container, Snackbar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './ListaProductos.module.css';
+import ComparadorProductos from '../Comparador/ComparadorProductos';
 
 function sumarDiasLaborables(fecha, dias) {
   let resultado = new Date(fecha);
@@ -24,13 +27,57 @@ function obtenerTextoEntrega() {
 }
 
 export default function ListaProductosGenerica({ categoria = 'PYPC', subcategoria = '', titulo = '', numProductos = 5, verMasRuta = '' }) {
+  const [comparar, setComparar] = useState([]);
+  const [showComparador, setShowComparador] = useState(false);
+
+  // Permitir añadir producto desde el buscador del comparador
+  useEffect(() => {
+    function handleAdd(event) {
+      const prod = event.detail;
+      setComparar(prev => {
+        if (prev.length < 4 && !prev.some(p => p.id === prod.id)) {
+          // Abrir modal si ahora hay dos
+          if (prev.length === 1) setShowComparador(true);
+          return [...prev, prod];
+        }
+        return prev;
+      });
+    }
+    window.addEventListener('comparar:add', handleAdd);
+    return () => window.removeEventListener('comparar:add', handleAdd);
+  }, []);
+
+  // Añadir o quitar producto de la lista de comparación
+  const toggleComparar = (producto) => {
+    setComparar(prev => {
+      if (prev.some(p => p.id === producto.id)) {
+        return prev.filter(p => p.id !== producto.id);
+      } else {
+        // Limitar a 4 productos
+        if (prev.length >= 4) return prev;
+        // Abrir modal solo cuando haya exactamente 1 seleccionado y se añade el segundo
+        if (prev.length === 1) setShowComparador(true);
+        return [...prev, producto];
+      }
+    });
+  };
+
+
+
+  const removeFromComparar = (id) => {
+    setComparar(prev => prev.filter(p => p.id !== id));
+  };
+
   const navigate = useNavigate();
-  const { setCart } = useCart();
+  const { setCart, cart } = useCart();
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [loadingAdd, setLoadingAdd] = useState({});
   const [alert, setAlert] = useState(null);
+  // Nuevo estado para feedback tipo toast
+  const [showToast, setShowToast] = useState(false);
+  const [toastContent, setToastContent] = useState({});
 
   useEffect(() => {
     setLoading(true);
@@ -122,6 +169,18 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                 e.currentTarget.style.transform = '';
               }}
             >
+              {/* Botón comparar */}
+              <Button
+                variant={comparar.some(p => p.id === prod.id) ? 'primary' : 'outline-primary'}
+                size="sm"
+                style={{ position: 'absolute', top: 10, right: 10, zIndex: 2, borderRadius: 20, fontWeight: 600 }}
+                onClick={e => {
+                  e.stopPropagation();
+                  toggleComparar(prod);
+                }}
+              >
+                {comparar.some(p => p.id === prod.id) ? '✓ Comparando' : 'Comparar'}
+              </Button>
               <div
                 className="d-flex align-items-center justify-content-center"
                 style={{
@@ -185,9 +244,10 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                   Recíbelo el {obtenerTextoEntrega()}
                 </div>
                 <button
-                  className={styles.addButton + " rounded-pill w-100 fw-semibold shadow-sm"}
+                  className={styles.addButton + " rounded-pill w-100 fw-semibold shadow-sm d-flex align-items-center justify-content-center"}
                   disabled={prod.stock <= 0 || (prod.id && loadingAdd[prod.id])}
-                  onClick={async () => {
+                  onClick={async (e) => {
+                    e.stopPropagation();
                     setLoadingAdd(prev => ({...prev, [prod.id]: true}));
                     try {
                       const token = localStorage.getItem('jwt');
@@ -204,11 +264,29 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                       const data = await res.json();
                       if (!res.ok) {
                         setAlert({ type: 'danger', message: data.error || 'No se pudo añadir al carrito.' });
+                        setToastContent({
+                          success: false,
+                          message: data.error || 'No se pudo añadir al carrito.'
+                        });
+                        setShowToast(true);
                       } else {
                         setCart(data);
+                        setToastContent({
+                          success: true,
+                          nombre: prod.nombre,
+                          img: prod.imagen || prod.img || '',
+                          message: 'Producto añadido al carrito',
+                          verCarrito: true
+                        });
+                        setShowToast(true);
                       }
                     } catch (err) {
                       setAlert({ type: 'danger', message: 'Error de red al añadir al carrito.' });
+                      setToastContent({
+                        success: false,
+                        message: 'Error de red al añadir al carrito.'
+                      });
+                      setShowToast(true);
                     } finally {
                       setLoadingAdd(prev => ({...prev, [prod.id]: false}));
                       setTimeout(() => setAlert(null), 2500);
@@ -218,10 +296,37 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                     fontSize: 15,
                     marginTop: 6,
                     padding: '10px 0',
+                    transition: 'background 0.18s, box-shadow 0.18s',
+                    boxShadow: '0 2px 8px #1976d233',
                   }}
                 >
-                  {loadingAdd && loadingAdd[prod.id] ? <span className="spinner-border spinner-border-sm me-2" /> : null}
-                  {prod.stock > 0 ? 'Añadir' : 'Sin stock'}
+                  {loadingAdd && loadingAdd[prod.id] ? (
+                    <span className="spinner-border spinner-border-sm me-2" />
+                  ) : (
+                    <ShoppingCartIcon style={{ fontSize: 21, marginRight: 7, color: '#1976d2' }} />
+                  )}
+                  <span>
+                    {prod.stock > 0 ? 'Añadir' : 'Sin stock'}
+                  </span>
+                  {/* Badge si ya está en el carrito */}
+                  {cart && cart.items && cart.items.some(item => item.product.id === prod.id) && (
+                    <span style={{
+                      background: '#1976d2',
+                      color: '#fff',
+                      borderRadius: '50%',
+                      fontSize: 12,
+                      marginLeft: 8,
+                      minWidth: 22,
+                      minHeight: 22,
+                      padding: '0 7px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 700
+                    }}>
+                      {cart.items.find(item => item.product.id === prod.id)?.qty || 1}
+                    </span>
+                  )}
                 </button>
               </div>
             </div>
@@ -232,6 +337,86 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
       {!loading && productos.length === 0 && (
         <Alert variant="info" className="mt-4">No hay productos disponibles.</Alert>
       )}
+    {/* Botón flotante para abrir comparador */}
+    {comparar.length > 0 && (
+      <Button
+        variant="success"
+        style={{
+          position: 'fixed',
+          bottom: 32,
+          right: 32,
+          zIndex: 1050,
+          borderRadius: 30,
+          boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+          fontWeight: 600,
+          padding: '12px 22px',
+        }}
+        onClick={() => setShowComparador(true)}
+      >
+        Comparar ({comparar.length})
+      </Button>
+    )}
+    {/* Modal comparador */}
+    <ComparadorProductos
+      productos={comparar}
+      show={showComparador}
+      onHide={() => setShowComparador(false)}
+      onRemove={removeFromComparar}
+      categoria={categoria}
+      subcategoria={subcategoria}
+    />
+      {/* Toast tipo tienda real */}
+      <Snackbar
+        open={showToast}
+        autoHideDuration={2800}
+        onClose={() => setShowToast(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        sx={{ zIndex: 3000 }}
+      >
+        <div style={{
+          background: toastContent.success ? '#fff' : '#ffebee',
+          color: toastContent.success ? '#1976d2' : '#c62828',
+          border: toastContent.success ? '2px solid #1976d2' : '2px solid #c62828',
+          borderRadius: 18,
+          boxShadow: '0 2px 18px #1976d277',
+          minWidth: 260,
+          maxWidth: 370,
+          padding: '18px 16px 14px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 13
+        }}>
+          {toastContent.success ? (
+            <CheckCircleIcon sx={{ color: '#43a047', fontSize: 32 }} />
+          ) : (
+            <ShoppingCartIcon sx={{ color: '#c62828', fontSize: 32 }} />
+          )}
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 2 }}>
+              {toastContent.success ? '¡Añadido al carrito!' : 'No se pudo añadir'}
+            </div>
+            {toastContent.nombre && (
+              <div style={{ fontSize: 15, color: '#222', fontWeight: 500, marginBottom: 1 }}>
+                {toastContent.nombre}
+              </div>
+            )}
+            <div style={{ fontSize: 14, color: toastContent.success ? '#1976d2' : '#c62828' }}>
+              {toastContent.message}
+            </div>
+            {toastContent.verCarrito && (
+              <Button
+                variant="outline-primary"
+                size="sm"
+                className="mt-2 fw-bold rounded-pill"
+                onClick={() => { setShowToast(false); navigate('/cart'); }}
+                style={{ fontSize: 14, padding: '4px 18px' }}
+              >
+                Ver carrito
+              </Button>
+            )}
+          </div>
+        </div>
+      </Snackbar>
     </Container>
   );
 }

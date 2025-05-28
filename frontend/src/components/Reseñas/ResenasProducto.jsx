@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
-import { getUserName } from '../utils/auth';
+import { getUserName } from '../../utils/auth';
 
 export default function ResenasProducto({ productId }) {
   const [resenas, setResenas] = useState([]);

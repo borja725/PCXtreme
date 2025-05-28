@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Alert, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { getUserName, getToken, removeToken, setToken } from '../utils/auth';
+import { getUserName, getToken, removeToken, setToken } from '../../utils/auth';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -142,13 +142,6 @@ export default function Profile() {
             <Form.Group className="mb-3" controlId="profileEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="profileImage">
-              <Form.Label>Foto de perfil</Form.Label>
-              <Form.Control type="file" accept="image/*" onChange={e => setProfileImage(e.target.files[0])} />
-              <div className="text-center mt-3">
-                <Image roundedCircle src={profileImage ? (typeof profileImage === 'string' ? profileImage : URL.createObjectURL(profileImage)) : undefined} width={120} height={120} style={{background:'#eee'}} />
-              </div>
             </Form.Group>
             <div className="d-flex flex-wrap gap-2 mb-3">
               <Button variant="success" onClick={handleSave} disabled={loading}>Guardar cambios</Button>

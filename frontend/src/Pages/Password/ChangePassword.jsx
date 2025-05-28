@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { getToken } from '../utils/auth';
+import { getToken } from '../../utils/auth';
 
 export default function ChangePassword() {
   const [oldPassword, setOldPassword] = useState('');
