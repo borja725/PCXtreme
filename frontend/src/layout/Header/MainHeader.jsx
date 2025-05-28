@@ -19,7 +19,7 @@ import { getUserName, getToken } from '../../utils/auth';
 const logoUrl = "../../public/logo.png";
 import SidebarMenu from '../../components/SidebarMenu/SidebarMenu';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Card from 'react-bootstrap/Card';
+import { Link } from 'react-router-dom';
 
 function MainHeader() {
   const { cartCount } = useCart();
@@ -187,27 +187,41 @@ function MainHeader() {
         <Box sx={{ width: '100%', bgcolor: '#fafafa' }}>
           <Container>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3, px: 4, py: 1 }}>
-              <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700 }}>
-                ¡Ofertas Flash NVIDIA!
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#1976d2', cursor: 'pointer' }}>
-                ¡Ofertas flash AMD!
-              </Typography>
-              <Typography variant="body2" sx={{ cursor: 'pointer' }}>
-                Tarjetas gráficas
-              </Typography>
-              <Typography variant="body2" sx={{ cursor: 'pointer' }}>
-                Portátiles
-              </Typography>
-              <Typography variant="body2" sx={{ cursor: 'pointer' }}>
-                PC sobremesa
-              </Typography>
-              <Typography variant="body2" sx={{ cursor: 'pointer' }}>
-                Monitores
-              </Typography>
-              <Typography variant="body2" sx={{ cursor: 'pointer' }}>
-                Componentes
-              </Typography>
+              <Link to="/productos/PYPC/Caja de Torre" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
+                  Cajas PC
+                </Typography>
+              </Link>
+              <Link to="/productos/PYPC/Tarjeta Gráfica" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
+                  Tarjetas gráficas
+                </Typography>
+              </Link>
+              <Link to="/productos/PYPC/Procesador" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
+                  Procesadores
+                </Typography>
+              </Link>
+              <Link to="/productos/PYPC/RAM" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
+                  Memorias RAM
+                </Typography>
+              </Link>
+              <Link to="/productos/PYPC/Refrigeracion" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
+                  Refrigeración                
+                </Typography>
+              </Link>
+              <Link to="/productos/PYPC/SSD" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
+                  Almacenamiento
+                </Typography>
+              </Link>
+              <Link to="/productos/PYPC/" style={{ textDecoration: 'none' }}>
+                <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
+                  Todos los componentes
+                </Typography>
+              </Link>
             </Box>
           </Container>
         </Box>
@@ -217,7 +231,6 @@ function MainHeader() {
   );
 }
 
-// Panel flotante de resultados de búsqueda
 function DropdownSearchPanel({ search, navigate, anchorRef }) {
   const [productos, setProductos] = React.useState([]);
   const [loading, setLoading] = React.useState(false);

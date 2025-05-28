@@ -19,7 +19,7 @@ export default function FooterPCXtreme() {
               <div className="col-12 col-sm-6">
                 <button
                   className="btn w-100 fw-bold promo-btn"
-                  style={{ minHeight: 48, borderRadius: 24, fontSize: 17, boxShadow: '0 2px 16px rgba(25,118,210,0.07)' }}
+                  style={{ color: '#1976d2', minHeight: 48, borderRadius: 24, fontSize: 17, boxShadow: '0 2px 16px rgba(25,118,210,0.07)' }}
                   onClick={() => navigate('/register')}
                   onMouseOver={e => { e.currentTarget.style.background = '#1976d2'; e.currentTarget.style.color = '#fff'; }}
                   onMouseOut={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#1976d2'; }}
@@ -30,7 +30,7 @@ export default function FooterPCXtreme() {
               <div className="col-12 col-sm-6">
                 <button
                   className="btn w-100 fw-bold promo-btn"
-                  style={{ minHeight: 48, borderRadius: 24, fontSize: 17, boxShadow: '0 2px 16px rgba(25,118,210,0.07)' }}
+                  style={{ color: '#1976d2', minHeight: 48, borderRadius: 24, fontSize: 17, boxShadow: '0 2px 16px rgba(25,118,210,0.07)' }}
                   onClick={() => navigate('/login')}
                   onMouseOver={e => { e.currentTarget.style.background = '#1976d2'; e.currentTarget.style.color = '#fff'; }}
                   onMouseOut={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#1976d2'; }}

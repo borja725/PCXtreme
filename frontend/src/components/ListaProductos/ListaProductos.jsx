@@ -3,6 +3,7 @@ import { Row, Alert, Spinner } from 'react-bootstrap';
 import { Container } from '@mui/material';
 import CarruselDestacado from '../CarruselDestacado';
 import ListaProductosGenerica from './ListaProductosGenerica';
+import BannerDoble from '../PromoBanner/BannerDoble';
 
 function sumarDiasLaborables(fecha, dias) {
   let resultado = new Date(fecha);
@@ -92,6 +93,7 @@ function ListaProductos() {
       {!loading && productos.length === 0 && (
         <Alert variant="info" className="mt-4">No hay productos disponibles.</Alert>
       )}
+      <BannerDoble />
     </Container>
     </>
   );

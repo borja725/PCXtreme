@@ -1,6 +1,6 @@
 .promo-btn {
   background: #fff;
-  color: #1976d2;
+  color: #1fd219;
   font-weight: 700;
   border-radius: 0.75rem;
   padding-left: 2rem;
@@ -8,6 +8,76 @@
   transition: background 0.2s, color 0.2s;
 }
 .promo-btn:hover, .promo-btn:focus {
-  background: #1976d2;
+  background: #63d219;
   color: #fff;
+}
+
+.promo-btn-glass {
+  background: rgba(255,255,255,0.97) !important;
+  color: #1fd219 !important;
+  border: 2px solid #1fd219 !important;
+  font-weight: 700;
+  font-size: 1.18rem;
+  padding: 14px 36px;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px #1fd21955;
+  transition: all 0.18s;
+}
+.promo-btn-glass:hover, .promo-btn-glass:focus {
+  background: #1fd219 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 24px #1fd21999;
+  border-color: #fff !important;
+}
+
+.promo-banner-hero-efecto {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card {
+  background: rgba(28,40,48,0.72);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px 0 #1976d255;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255,255,255,0.13);
+  max-width: 600px;
+  width: 100%;
+}
+
+.promo-btn-glass-amd {
+  background: rgba(255,255,255,0.97) !important;
+  color: #ff4d5a !important;
+  border: 2px solid #ff4d5a !important;
+  font-weight: 700;
+  font-size: 1.09rem;
+  padding: 12px 30px;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px #ff4d5a55;
+  transition: all 0.18s;
+}
+.promo-btn-glass-amd:hover, .promo-btn-glass-amd:focus {
+  background: #ff4d5a !important;
+  color: #fff !important;
+  box-shadow: 0 4px 24px #ff4d5a99;
+  border-color: #fff !important;
+}
+
+
+@media (max-width: 767px) {
+  .glass-card {
+    max-width: 98vw;
+    padding: 1.5rem !important;
+  }
+  .promo-banner-hero-efecto {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+  .promo-btn-glass {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 1rem;
+  }
 }
