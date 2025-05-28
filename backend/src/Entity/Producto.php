@@ -10,6 +10,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ProductoRepository::class)]
 class Producto
 {
+    #[ORM\OneToMany(mappedBy: 'producto', targetEntity: Review::class)]
+    private $reviews;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -159,6 +162,33 @@ class Producto
     public function setModelo(?string $modelo): static
     {
         $this->modelo = $modelo;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setProducto($this);
+        }
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            if ($review->getProducto() === $this) {
+                $review->setProducto(null);
+            }
+        }
         return $this;
     }
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Spinner, Alert, Button, Badge } from 'react-bootstrap';
+import { useCart } from '../components/CartContext';
+import ResenasProducto from '../components/ResenasProducto';
 
 export default function ProductoDetalle() {
 
@@ -39,12 +41,12 @@ function RelacionadosAleatorios({ idActual }) {
   if (!productos.length) return <div className="text-secondary px-2 pb-4">No hay recomendaciones por ahora.</div>;
 
   return (
-    <Row className="g-4 w-100 px-2 d-flex">
+    <Row className="g-4 w-100 px-2 d-flex justify-content-between">
       {productos.map((rel, idx) => (
         <Col key={rel.id || idx} xs={12} sm={6} md={4} lg={2} className="d-flex">
-  <Card
-    className="shadow-sm border-0 rounded-4 p-4 w-100 h-100"
-    style={{ width: '100%', maxWidth: '100%', minWidth: 0, background: '#fff', transition: 'box-shadow 0.16s', cursor: 'pointer' }}
+    <Card
+    className="shadow-sm border-0 rounded-4 p-4 w-100 h-100 d-flex flex-column"
+    style={{ width: '100%', maxWidth: '100%', minWidth: 0, background: '#fff', transition: 'box-shadow 0.16s', cursor: 'pointer', height: '100%' }}
     onClick={() => window.location.href = `/producto/${rel.id}`}
   >
     <img
@@ -53,8 +55,12 @@ function RelacionadosAleatorios({ idActual }) {
       className="img-fluid mb-4 rounded"
       style={{ height: 180, objectFit: 'contain', background: '#fafbfc' }}
     />
-    <div className="fw-bold text-truncate mb-2" title={rel.nombre} style={{ fontSize: 22 }}>{rel.nombre}</div>
-    <div className="text-primary fw-semibold mb-2" style={{ fontSize: 26 }}>{Number(rel.precio).toFixed(2)} €</div>
+    <div style={{flex: 1}}>
+      <div className="fw-bold text-truncate mb-2" title={rel.nombre} style={{ fontSize: 22 }}>{rel.nombre}</div>
+    </div>
+    <div style={{marginTop: 'auto'}}>
+      <div className="text-primary fw-semibold mb-2" style={{ fontSize: 26 }}>{Number(rel.precio).toFixed(2)} €</div>
+    </div>
   </Card>
 </Col>
       ))}
@@ -63,10 +69,13 @@ function RelacionadosAleatorios({ idActual }) {
 }
 
   const { id } = useParams();
+  const { setCart } = useCart();
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [imgIdx, setImgIdx] = useState(0);
+  const [loadingAdd, setLoadingAdd] = useState(false);
+  const [alertAdd, setAlertAdd] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -103,7 +112,6 @@ function RelacionadosAleatorios({ idActual }) {
     <div style={{ background: '#f7f8fa', minHeight: '100vh', padding: '40px 0' }}>
       <Container fluid style={{ maxWidth: 1500, padding: '0 32px' }}>
         <Row className="g-5 flex-column flex-lg-row align-items-stretch justify-content-center" style={{ minHeight: 600 }}>
-          {/* Imagen protagonista */}
           <Col lg={4} className="d-flex flex-column align-items-center justify-content-center mb-5 mb-lg-0">
             <div className="bg-white d-flex align-items-center justify-content-center rounded-5 shadow-lg position-relative"
               style={{ width: '100%', maxWidth: 480, minHeight: 440, height: 'auto', aspectRatio: '1/1', overflow: 'hidden', border: 'none' }}>
@@ -130,8 +138,6 @@ function RelacionadosAleatorios({ idActual }) {
               </div>
             )}
           </Col>
-
-          {/* Info principal */}
           <Col lg={5} className="d-flex flex-column justify-content-center mb-5 mb-lg-0">
             <div className="mb-3 d-flex align-items-center gap-3 flex-wrap">
               <span className="text-secondary fw-semibold" style={{ fontSize: 18 }}>{producto.marca}</span>
@@ -139,7 +145,6 @@ function RelacionadosAleatorios({ idActual }) {
               {producto.tipo && <Badge bg="info" className="ms-2 text-light">{producto.tipo}</Badge>}
             </div>
             <h1 className="fw-bold mb-4" style={{ fontSize: 40, lineHeight: 1.1 }}>{producto.nombre}</h1>
-            {/* Valoración */}
             <div className="mb-4 d-flex align-items-center gap-3">
               <span className="fw-bold text-warning" style={{ fontSize: 24 }}>{'★'.repeat(Math.round(producto.valoracion||0))}{'☆'.repeat(5-Math.round(producto.valoracion||0))}</span>
               <span style={{ color: '#888', fontSize: 17 }}>{producto.valoracion ? producto.valoracion.toFixed(2) + ' / 5' : 'Sin valoraciones'}</span>
@@ -148,7 +153,6 @@ function RelacionadosAleatorios({ idActual }) {
             {producto.descripcion && (
               <div className="mb-4 p-4 bg-light rounded-4 shadow-sm" style={{ fontSize: 18, color: '#222', minHeight: 80 }}>{producto.descripcion}</div>
             )}
-            {/* Ficha técnica */}
             {producto.caracteristicas && Array.isArray(producto.caracteristicas) && producto.caracteristicas.length > 0 && (
               <div className="mb-4">
                 <h5 className="fw-bold mb-3">Ficha técnica</h5>
@@ -164,7 +168,6 @@ function RelacionadosAleatorios({ idActual }) {
                 </table>
               </div>
             )}
-            {/* Experto/recomendación */}
             {producto.experto && (
               <div className="mb-4 p-4 bg-primary bg-opacity-10 border-0 rounded-4 shadow-sm">
                 <div className="fw-bold mb-2 text-primary">Recomendado por nuestro experto</div>
@@ -172,12 +175,10 @@ function RelacionadosAleatorios({ idActual }) {
               </div>
             )}
           </Col>
-
-          {/* Card de compra */}
           <Col lg={3} className="d-flex flex-column justify-content-center">
-            <Card className="shadow-lg border-0 rounded-5 p-4 sticky-top" style={{ top: 40, zIndex: 2, minWidth: 300, maxWidth: 410, background: '#fff' }}>
+            <Card className="shadow-lg border-0 rounded-5 p-4 sticky-top" style={{ top: 40, zIndex: 2, minWidth:440, maxWidth: 500, background: '#fff' }}>
               <div className="d-flex align-items-end gap-3 mb-3">
-                <span className="fw-bold" style={{ fontSize: 38, color: '#ff7100' }}>{Number(producto.precio).toFixed(2)} €</span>
+                <span className="fw-bold" style={{ fontSize: 38, color: '#1976d2' }}>{Number(producto.precio).toFixed(2)} €</span>
                 {producto.precioAnterior && (
                   <span className="text-danger fw-semibold ms-2" style={{ textDecoration: 'line-through', fontSize: 20 }}>{Number(producto.precioAnterior).toFixed(2)} €</span>
                 )}
@@ -186,22 +187,62 @@ function RelacionadosAleatorios({ idActual }) {
                 )}
               </div>
               <div className="mb-4">
-                <Button
-                  variant="warning"
-                  className="w-100 fw-bold py-3 fs-4 text-white rounded-4"
-                  style={{ background: '#ff7100', border: 'none', boxShadow: '0 4px 18px 0 #ff710044', letterSpacing: 1 }}
-                  disabled={producto.stock <= 0}
-                >
-                  {producto.stock > 0 ? 'Añadir al carrito' : 'Sin stock'}
-                </Button>
-                {producto.stock <= 0 && <div className="text-danger mt-3 fw-semibold">Este producto está agotado.</div>}
+                <div className="d-flex flex-column align-items-start gap-2">
+                  <div style={{ fontSize: 15, color: '#2e7d32' }}>
+                    {producto.stock > 0 ? `📦 Recíbelo a partir del ${(() => {
+                      let resultado = new Date();
+                      let sumados = 0;
+                      while (sumados < 2) {
+                        resultado.setDate(resultado.getDate() + 1);
+                        if (resultado.getDay() !== 0 && resultado.getDay() !== 6) sumados++;
+                      }
+                      return resultado.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                    })()}` : 'No disponible para envío inmediato'}
+                  </div>
+                  <Button
+                    className="w-100 fw-bold py-3 fs-5 rounded-4 shadow-sm"
+                    style={{ background: '#1976d2', border: 'none', color: '#fff', letterSpacing: 1, fontWeight: 600 }}
+                    disabled={producto.stock <= 0 || loadingAdd}
+                    onClick={async () => {
+                      if (producto.stock <= 0 || loadingAdd) return;
+                      setLoadingAdd(true);
+                      setAlertAdd(null);
+                      try {
+                        const res = await fetch('/api/cart/add', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ productId: producto.id, qty: 1 })
+                        });
+                        if (!res.ok) throw new Error('No se pudo añadir al carrito');
+                        const data = await res.json();
+                        setCart(data);
+                        setAlertAdd({ type: 'success', msg: '¡Producto añadido al carrito!' });
+                      } catch (e) {
+                        setAlertAdd({ type: 'danger', msg: e.message || 'Error al añadir al carrito' });
+                      } finally {
+                        setLoadingAdd(false);
+                        setTimeout(() => setAlertAdd(null), 1800);
+                      }
+                    }}
+                  >
+                    {loadingAdd ? <Spinner size="sm" animation="border" /> : (producto.stock > 0 ? 'Añadir al carrito' : 'Sin stock')}
+                  </Button>
+                  {producto.stock <= 0 && <div className="text-danger mt-2 fw-semibold">Este producto está agotado.</div>}
+                  {alertAdd && <Alert variant={alertAdd.type} className="mt-2 py-2 px-3 small">{alertAdd.msg}</Alert>}
+                </div>
               </div>
-              <div className="mb-4" style={{ fontSize: 16 }}>
-                <div className="mb-1"><b>Envío:</b> Gratis <span className="ms-2"><b>Devolución:</b> Gratis</span></div>
-                {producto.stock > 0 && <div className="text-success mb-1">📦 Recíbelo en 1-2 días laborables</div>}
-                <div><b>Garantía:</b> 2 años</div>
+              <div className="mb-4 px-2 py-3 rounded-4" style={{ fontSize: 16, background: '#f6fafd', border: '1px solid #e3eafc', color: '#1976d2' }}>
+                <div className="mb-2 d-flex align-items-center gap-2">
+                  <span role="img" aria-label="camion">🚚</span>
+                  <b>Envío:</b> <span style={{color:'#388e3c'}}>Gratis</span>
+                  <span className="ms-3" role="img" aria-label="devolucion">↩️</span>
+                  <b>Devolución:</b> <span style={{color:'#388e3c'}}>Gratis 30 días</span>
+                </div>
+                <div className="mb-2 d-flex align-items-center justify-content-center gap-2">
+                  <span role="img" aria-label="garantia">🛡️</span>
+                  <b>Garantía:</b> <span style={{color:'#1976d2'}}>2 años oficial</span>
+                </div>
               </div>
-              {/* Servicios extra */}
               {producto.servicios && Array.isArray(producto.servicios) && producto.servicios.length > 0 && (
                 <div className="mb-2">
                   <h6 className="fw-bold mb-2">Servicios disponibles</h6>
@@ -218,18 +259,17 @@ function RelacionadosAleatorios({ idActual }) {
             </Card>
           </Col>
         </Row>
-        {/* Productos relacionados SIEMPRE visibles */}
-        {/* Sección productos relacionados a TODO el ancho */}
-        <div className="w-100 px-0" style={{background: '#fff', marginLeft: 0, marginRight: 0}}>
+        <ResenasProducto productId={producto.id} />
+        <div className="w-100 px-0" style={{background: '#fff', marginLeft: 0, marginRight: 0, justifyContent: 'space-between'}}>
           <div className="container-fluid py-5 px-0">
-            <h2 className="fw-bold mb-4" style={{ fontSize: 28 }}>También te podría interesar</h2>
+            <h2 className="fw-bold mb-4" style={{ fontSize: 28, color: '#1976d2' }}>¡También te podría interesar!</h2>
             {producto.relacionados && Array.isArray(producto.relacionados) && producto.relacionados.length > 0 ? (
-              <Row className="g-4 w-100 m-0">
+              <Row className="g-4 w-100 m-0 justify-content-between">
                 {producto.relacionados.slice(0, 5).map((rel, idx) => (
                   <Col key={rel.id || idx} xs={12} sm={6} md={4} lg={2} className="d-flex">
-                    <Card
-                      className="shadow-sm border-0 rounded-4 p-4 w-100 h-100"
-                      style={{ width: '100%', maxWidth: '100%', minWidth: 0, background: '#fff', transition: 'box-shadow 0.16s', cursor: 'pointer' }}
+                      <Card
+                      className="shadow-sm border-0 rounded-4 p-4 w-100 h-100 d-flex flex-column"
+                      style={{ width: '100%', maxWidth: '100%', minWidth: 0, background: '#fff', transition: 'box-shadow 0.16s', cursor: 'pointer', height: '100%'}}
                       onClick={() => window.location.href = `/producto/${rel.id}`}
                     >
                       <img
@@ -238,8 +278,12 @@ function RelacionadosAleatorios({ idActual }) {
                         className="img-fluid mb-4 rounded"
                         style={{ height: 180, objectFit: 'contain', background: '#fafbfc' }}
                       />
-                      <div className="fw-bold text-truncate mb-2" title={rel.nombre} style={{ fontSize: 22 }}>{rel.nombre}</div>
-                      <div className="text-primary fw-semibold mb-2" style={{ fontSize: 26 }}>{Number(rel.precio).toFixed(2)} €</div>
+                      <div style={{flex: 1}}>
+                        <div className="fw-bold text-truncate mb-2" title={rel.nombre} style={{ fontSize: 22 }}>{rel.nombre}</div>
+                      </div>
+                      <div style={{marginTop: 'auto'}}>
+                        <div className="text-primary fw-semibold mb-2" style={{ fontSize: 26 }}>{Number(rel.precio).toFixed(2)} €</div>
+                      </div>
                     </Card>
                   </Col>
                 ))}

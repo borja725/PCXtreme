@@ -110,7 +110,6 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                 cursor: 'pointer',
               }}
               onClick={e => {
-                // Evitar navegar si el click es en el botón Añadir
                 if (e.target.closest('button')) return;
                 navigate(`/producto/${prod.id}`);
               }}
@@ -147,24 +146,43 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                   }}
                 />
               </div>
-              <div className="card-body d-flex flex-column justify-content-between p-3">
-                <div>
-                  <h5 className="card-title fw-semibold mb-1" style={{ fontSize: 16, color: '#222' }}>{prod.nombre}</h5>
-                  <div className="mb-2" style={{ fontSize: 15, color: '#fbc02d' }}>
-                    <span>★★★★★</span>
-                    <span style={{ color: '#888', fontSize: 13, marginLeft: 4 }}>(0)</span>
+              <div className="card-body d-flex flex-column p-3" style={{ height: '65%' }} onClick={() => navigate(`/producto/${prod.id}`)}>
+              <div style={{ flex: 1 }}
+              onClick={e => {
+                if (e.target.closest('button')) return;
+                navigate(`/producto/${prod.id}`);
+              }}
+              >
+                <h5 className="card-title fw-semibold mb-1" style={{ fontSize: 16, color: '#222' }}>{prod.nombre}</h5>
+                <div className="mb-2" style={{ fontSize: 15, color: '#fbc02d', display: 'flex', alignItems: 'center' }}>
+                  {(() => {
+                    const rating = prod.mediaResenas || 0;
+                    const total = 5;
+                    const fullStars = Math.floor(rating);
+                    const halfStar = rating - fullStars >= 0.5;
+                    const emptyStars = total - fullStars - (halfStar ? 1 : 0);
+                    return (
+                      <>
+                        {[...Array(fullStars)].map((_, i) => <span key={"full"+i}>★</span>)}
+                        {halfStar && <span key="half">☆</span>}
+                        {[...Array(emptyStars)].map((_, i) => <span key={"empty"+i}>☆</span>)}
+                        <span style={{ color: '#888', fontSize: 13, marginLeft: 4 }}>({prod.numResenas || 0})</span>
+                      </>
+                    );
+                  })()}
+                </div>
+                {prod.precioAnterior && (
+                  <div style={{ fontSize: 14, color: '#888', textDecoration: 'line-through' }}>
+                    {prod.precioAnterior} €
                   </div>
-                  {prod.precioAnterior && (
-                    <div style={{ fontSize: 14, color: '#888', textDecoration: 'line-through' }}>
-                      {prod.precioAnterior} €
-                    </div>
-                  )}
-                  <div className="fw-bold mb-1" style={{ fontSize: 22, color: '#1976d2' }}>
-                    {prod.precio} €
-                  </div>
-                  <div style={{ fontSize: 13, color: '#2e7d32', marginBottom: 6 }}>
-                    Recíbelo el {obtenerTextoEntrega()}
-                  </div>
+                )}
+              </div>
+              <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                <div className="fw-bold mb-1" style={{ fontSize: 22, color: '#1976d2' }}>
+                  {prod.precio} €
+                </div>
+                <div style={{ fontSize: 13, color: '#2e7d32', marginBottom: 6 }}>
+                  Recíbelo el {obtenerTextoEntrega()}
                 </div>
                 <button
                   className={styles.addButton + " rounded-pill w-100 fw-semibold shadow-sm"}
@@ -187,7 +205,7 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                       if (!res.ok) {
                         setAlert({ type: 'danger', message: data.error || 'No se pudo añadir al carrito.' });
                       } else {
-                        setCart(data); // update global cart context
+                        setCart(data);
                       }
                     } catch (err) {
                       setAlert({ type: 'danger', message: 'Error de red al añadir al carrito.' });
@@ -206,6 +224,7 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                   {prod.stock > 0 ? 'Añadir' : 'Sin stock'}
                 </button>
               </div>
+            </div>
             </div>
           </Col>
         ))}

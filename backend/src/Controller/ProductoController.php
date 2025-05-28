@@ -27,8 +27,30 @@ class ProductoController extends AbstractController
         if ($subcategoria) {
             $productos = $repo->findBy(['subcategoria' => $subcategoria]);
         }
-        $json = $serializer->serialize($productos, 'json', ['groups' => 'producto:read']);
-        return new JsonResponse($json, 200, [], true);
+
+        $productosConResenas = [];
+        foreach ($productos as $producto) {
+            $reviews = $producto->getReviews();
+            $reviewsArray = is_array($reviews) ? $reviews : $reviews->toArray();
+            $numResenas = count($reviewsArray);
+            $media = $numResenas > 0 ? array_sum(array_map(fn($r) => $r->getRating(), $reviewsArray)) / $numResenas : 0;
+            $productoArr = [
+                'id' => $producto->getId(),
+                'nombre' => $producto->getNombre(),
+                'precio' => $producto->getPrecio(),
+                'precioAnterior' => null,
+                'stock' => $producto->getStock(),
+                'imatgeurl' => $producto->getImatgeurl(),
+                'categoria' => $producto->getCategoria(),
+                'subcategoria' => $producto->getSubcategoria(),
+                'marca' => $producto->getMarca(),
+                'modelo' => $producto->getModelo(),
+                'mediaResenas' => round($media,1),
+                'numResenas' => $numResenas
+            ];
+            $productosConResenas[] = $productoArr;
+        }
+        return $this->json($productosConResenas);
     }
 
     #[Route('', methods: ['POST'])]

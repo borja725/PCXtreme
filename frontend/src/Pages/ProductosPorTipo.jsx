@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Row, Col, Spinner, Alert } from "react-bootstrap";
 import FiltrosProductos from "../components/FiltrosProductos";
 import styles from '../components/ListaProductos/ListaProductos.module.css';
@@ -28,6 +28,7 @@ function obtenerTextoEntrega() {
 
 
 export default function ProductosPorTipo() {
+  const navigate = useNavigate();
   const { setCart } = useCart();
   const [loadingAdd, setLoadingAdd] = useState({});
   const [alert, setAlert] = useState(null);
@@ -81,7 +82,7 @@ export default function ProductosPorTipo() {
       })
       .then(data => {
         setProductos(data);
-        setPaginaActual(1); // Reinicia a la primera página al cambiar filtro
+        setPaginaActual(1); 
         setLoading(false);
       })
       .catch(error => {
@@ -91,7 +92,6 @@ export default function ProductosPorTipo() {
       });
   }, [categoria, subcat]);
 
-  // Filtrar productos según los filtros seleccionados
   const productosFiltrados = useMemo(() => {
     let filtrados = productos;
     if (filtros.marcas.length > 0) filtrados = filtrados.filter(p => filtros.marcas.includes(p.marca));
@@ -155,7 +155,6 @@ export default function ProductosPorTipo() {
       </div>
       {loading && <Spinner animation="border" />}
       {error && <Alert variant="danger">{error}</Alert>}
-      {/* Filtros y productos */}
       <Row className="g-4">
         <Col xs={12} md={3} lg={3} xl={2} className="mb-4">
           <FiltrosProductos productos={productos} filtros={filtros} setFiltros={setFiltros} mostrarModelos={titulo !== "Todos los Componentes"} />
@@ -166,99 +165,102 @@ export default function ProductosPorTipo() {
               .slice((paginaActual - 1) * PRODUCTOS_POR_PAGINA, paginaActual * PRODUCTOS_POR_PAGINA)
               .map((prod) => (
                 <Col xs={12} md={6} lg={4} xl={3} key={prod.id}>
-                  {/* ...resto del código del producto... */}
           <div
-  className={styles.productCardAnim + " card h-100 border-0 shadow-sm product-card position-relative overflow-hidden"}
-  style={{
-    borderRadius: 14,
-    background: '#fff',
-    minHeight: 370,
-    transition: 'box-shadow 0.22s cubic-bezier(.4,2.2,.6,1), transform 0.18s',
-    cursor: 'pointer',
-  }}
->
-  <div
-    className="d-flex align-items-center justify-content-center"
-    style={{
-      background: '#fff',
-      minHeight: 140,
-      height: 'auto',
-      padding: 18,
-      borderTopLeftRadius: 14,
-      borderTopRightRadius: 14,
-    }}
-  >
-    <img
-      src={prod.imatgeurl || "/placeholder.png"}
-      alt={prod.nombre}
-      className="img-fluid"
-      height={170}
-      width={170}
-      style={{
-        maxHeight: 170,
-        maxWidth: '100%',
-        objectFit: 'contain'
-      }}
-    />
-  </div>
-  <div className="card-body d-flex flex-column justify-content-between p-3">
-    <div>
-      <h5 className="card-title fw-semibold mb-1" style={{ fontSize: 16, color: '#222' }}>{prod.nombre}</h5>
-      <div className="mb-2" style={{ fontSize: 15, color: '#fbc02d' }}>
-        <span>★★★★★</span>
-        <span style={{ color: '#888', fontSize: 13, marginLeft: 4 }}>(0)</span>
-      </div>
-      {prod.precioAnterior && (
-        <div style={{ fontSize: 14, color: '#888', textDecoration: 'line-through' }}>
-          {Number(prod.precioAnterior).toFixed(2)} €
+          className={styles.productCardAnim + " card h-100 border-0 shadow-sm product-card position-relative overflow-hidden"}
+          style={{
+            borderRadius: 14,
+            background: '#fff',
+            minHeight: 370,
+            transition: 'box-shadow 0.22s cubic-bezier(.4,2.2,.6,1), transform 0.18s',
+            cursor: 'pointer',
+          }}
+          onClick={() => navigate(`/producto/${prod.id}`)}
+        >
+          <div
+            className="d-flex align-items-center justify-content-center"
+            style={{
+              background: '#fff',
+              minHeight: 140,
+              height: 'auto',
+              padding: 18,
+              borderTopLeftRadius: 14,
+              borderTopRightRadius: 14,
+            }}
+          >
+            <img
+              src={prod.imatgeurl || "/placeholder.png"}
+              alt={prod.nombre}
+              className="img-fluid"
+              height={170}
+              width={170}
+              style={{
+                maxHeight: 170,
+                maxWidth: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          </div>
+          <div className="card-body d-flex flex-column p-3" style={{height: '65%'}}>
+            <div style={{ flex: 1 }}>
+              <h5 className="card-title fw-semibold mb-1" style={{ fontSize: 16, color: '#222' }}>{prod.nombre}</h5>
+              <div className="mb-2" style={{ fontSize: 15, color: '#fbc02d' }}>
+                <span>★★★★★</span>
+                <span style={{ color: '#888', fontSize: 13, marginLeft: 4 }}>(0)</span>
+              </div>
+              {prod.precioAnterior && (
+                <div style={{ fontSize: 14, color: '#888', textDecoration: 'line-through' }}>
+                  {Number(prod.precioAnterior).toFixed(2)} €
+                </div>
+              )}
+            </div>
+            <div style={{ marginTop: 'auto', width: '100%' }}>
+              <div className="fw-bold mb-1" style={{ fontSize: 22, color: '#1976d2' }}>
+                {Number(prod.precio).toFixed(2)} €
+              </div>
+              <div style={{ fontSize: 13, color: '#2e7d32', marginBottom: 6 }}>
+                Recíbelo el {obtenerTextoEntrega()}
+              </div>
+              <button
+                className={styles.addButton + " rounded-pill w-100 fw-semibold shadow-sm"}
+                disabled={prod.stock <= 0 || loadingAdd[prod.id]}
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  setLoadingAdd(prev => ({ ...prev, [prod.id]: true }));
+                  try {
+                    const token = localStorage.getItem('jwt');
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (token) headers['Authorization'] = `Bearer ${token}`;
+                    const res = await fetch(`http://localhost:8000/api/cart/add`, {
+                      method: 'POST',
+                      headers,
+                      credentials: 'include',
+                      body: JSON.stringify({ productId: prod.id, qty: 1 })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                      setAlert({ type: 'danger', message: data.error || 'No se pudo añadir al carrito.' });
+                    } else {
+                      setCart(data);
+                    }
+                  } catch (err) {
+                    setAlert({ type: 'danger', message: 'Error de red al añadir al carrito.' });
+                  } finally {
+                    setLoadingAdd(prev => ({ ...prev, [prod.id]: false }));
+                    setTimeout(() => setAlert(null), 2500);
+                  }
+                }}
+                style={{
+                  fontSize: 15,
+                  marginTop: 6,
+                  padding: '10px 0',
+                }}
+              >
+                {loadingAdd[prod.id] ? <span className="spinner-border spinner-border-sm me-2" /> : null}
+                {prod.stock > 0 ? 'Añadir' : 'Sin stock'}
+              </button>
+            </div>
+          </div>
         </div>
-      )}
-      <div className="fw-bold mb-1" style={{ fontSize: 22, color: '#1976d2' }}>
-        {Number(prod.precio).toFixed(2)} €
-      </div>
-      <div style={{ fontSize: 13, color: '#2e7d32', marginBottom: 6 }}>
-        Recíbelo el {obtenerTextoEntrega()}
-      </div>
-    </div>
-    <button
-      className={styles.addButton + " rounded-pill w-100 fw-semibold shadow-sm"}
-      disabled={prod.stock <= 0 || loadingAdd[prod.id]}
-      onClick={async () => {
-        setLoadingAdd(prev => ({ ...prev, [prod.id]: true }));
-        try {
-          const token = localStorage.getItem('jwt');
-          const headers = { 'Content-Type': 'application/json' };
-          if (token) headers['Authorization'] = `Bearer ${token}`;
-          const res = await fetch(`http://localhost:8000/api/cart/add`, {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-            body: JSON.stringify({ productId: prod.id, qty: 1 })
-          });
-          const data = await res.json();
-          if (!res.ok) {
-            setAlert({ type: 'danger', message: data.error || 'No se pudo añadir al carrito.' });
-          } else {
-            setCart(data); // actualiza el contexto global
-          }
-        } catch (err) {
-          setAlert({ type: 'danger', message: 'Error de red al añadir al carrito.' });
-        } finally {
-          setLoadingAdd(prev => ({ ...prev, [prod.id]: false }));
-          setTimeout(() => setAlert(null), 2500);
-        }
-      }}
-      style={{
-        fontSize: 15,
-        marginTop: 6,
-        padding: '10px 0',
-      }}
-    >
-      {loadingAdd[prod.id] ? <span className="spinner-border spinner-border-sm me-2" /> : null}
-      {prod.stock > 0 ? 'Añadir' : 'Sin stock'}
-    </button>
-  </div>
-</div>
         </Col>
         ))}
        </Row>
