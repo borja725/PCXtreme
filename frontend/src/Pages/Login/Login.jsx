@@ -4,11 +4,14 @@ import styles from './loginCard.module.css';
 import { useNavigate } from 'react-router-dom';
 const logoUrl = "../../public/logo.png";
 import { setToken } from '../../utils/auth';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
 export default function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordWarning, setPasswordWarning] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -61,6 +64,7 @@ export default function Login() {
             <h4 className="mb-3 text-primary fw-bold">Inicia sesión</h4>
             {success && <Alert variant="success">¡Sesión iniciada correctamente!</Alert>}
             {error && <Alert variant="danger">{error}</Alert>}
+            {passwordWarning && <Alert variant="warning">{passwordWarning}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="loginUsername">
                 <Form.Label>Usuario</Form.Label>
@@ -74,13 +78,32 @@ export default function Login() {
               </Form.Group>
               <Form.Group className="mb-3" controlId="loginPassword">
                 <Form.Label>Contraseña</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                  placeholder="Introduce tu contraseña"
-                />
+                <div style={{ position: 'relative' }}>
+                  <Form.Control
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    placeholder="Introduce tu contraseña"
+                  />
+                  <span
+                    onClick={() => setShowPassword(s => !s)}
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      cursor: 'pointer',
+                      color: '#1976d2',
+                      fontSize: 22,
+                      userSelect: 'none',
+                      zIndex: 2
+                    }}
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  >
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </span>
+                </div>
               </Form.Group>
               <Button type="submit" variant="primary" className="w-100 fw-bold mb-2" disabled={loading}>
                 {loading ? "Cargando..." : "Acceder"}

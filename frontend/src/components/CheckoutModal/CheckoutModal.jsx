@@ -16,12 +16,93 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
     name: '', address: '', city: '', province: '', postal: '', phone: '', email: '',
     card: '', expiry: '', cvv: ''
   });
-  const { cart, setCart } = useCart();
+  const [errors, setErrors] = useState({});
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'name':
+        if (!value) return 'El nombre es obligatorio';
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$/.test(value)) return 'Solo letras y espacios';
+        return '';
+      case 'phone':
+        if (!value) return 'El teléfono es obligatorio';
+        if (!/^\d{9}$/.test(value)) return 'Introduce un teléfono válido (exactamente 9 dígitos)';
+        return '';
+      case 'address':
+        if (!value) return 'La dirección es obligatoria';
+        if (value.length < 5) return 'Introduce una dirección válida';
+        return '';
+      case 'city':
+        if (!value) return 'La ciudad es obligatoria';
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$/.test(value)) return 'Solo letras y espacios';
+        return '';
+      case 'province':
+        if (!value) return 'La provincia es obligatoria';
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$/.test(value)) return 'Solo letras y espacios';
+        return '';
+      case 'postal':
+        if (!value) return 'El código postal es obligatorio';
+        if (!/^\d{5}$/.test(value)) return 'Introduce un código postal válido (5 dígitos)';
+        return '';
+      case 'email':
+        if (!value) return 'El email es obligatorio';
+        if (!/^\S+@\S+\.\S+$/.test(value)) return 'Introduce un email válido';
+        return '';
+      case 'card':
+        if (!value) return 'El número de tarjeta es obligatorio';
+        if (!/^\d{16}$/.test(value.replace(/\s/g, ''))) return 'Introduce los 16 dígitos de la tarjeta';
+        return '';
+      case 'expiry':
+        if (!value) return 'La fecha de caducidad es obligatoria';
+        if (!/^(0[1-9]|1[0-2])\/(\d{2})$/.test(value)) return 'Formato MM/AA';
+        const [mes, anio] = value.split('/');
+        const hoy = new Date();
+        const fecha = new Date(2000 + parseInt(anio), parseInt(mes));
+        if (fecha < hoy) return 'La tarjeta está caducada';
+        return '';
+      case 'cvv':
+        if (!value) return 'El CVV es obligatorio';
+        if (!/^\d{3,4}$/.test(value)) return 'Introduce un CVV válido (3 o 4 dígitos)';
+        return '';
+      default:
+        return '';
+    }
+  };
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+    let newValue = value;
+    if (name === 'phone') {
+      newValue = value.replace(/[^\d]/g, '').slice(0, 9);
+    }
+    setForm(f => ({ ...f, [name]: newValue }));
+    setErrors(prev => ({ ...prev, [name]: validateField(name, newValue) }));
   };
+
+  const isStep1Valid = () => {
+    const required = ['name','phone','address','city','province','postal','email'];
+    let valid = true;
+    required.forEach(field => {
+      const err = validateField(field, form[field]);
+      if (err) valid = false;
+    });
+    return valid;
+  };
+
+  const isStep2Valid = () => {
+    if (!form.card || form.card.replace(/\s/g, '').length !== 16) return false;
+    const required = ['card','expiry','cvv'];
+    let valid = true;
+    required.forEach(field => {
+      const err = validateField(field, form[field]);
+      if (err) valid = false;
+    });
+    return valid;
+  };
+
+  const { cart, setCart } = useCart();
+
+
 
   const validateStep1 = () => {
     return form.name && form.address && form.city && form.province && form.postal && form.phone && form.email;
@@ -90,7 +171,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
           </div>
         ) : completed ? (
           <div className="d-flex justify-content-center align-items-center" style={{ minHeight: 120, padding: '0 10px' }}>
-            <div className="card shadow-lg border-0 p-4" style={{ maxWidth: 800, minWidth: '100%', borderRadius: 24 }}>
+            <div className="card shadow-lg border-0 p-4 rounded-4" style={{ maxWidth: 800, minWidth: '100%' }}>
               <div className="card-body text-center">
                 <div className="mb-3">
                   <span className="bg-success bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style={{ width: 72, height: 72 }}>
@@ -104,7 +185,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                 </div>
                 <div className="mb-3">
                   <h6 className="fw-bold mb-2 text-primary-emphasis">Resumen del pedido</h6>
-                  <Table size="sm" bordered responsive className="mb-3 align-middle" style={{ borderRadius: 16, overflow: 'hidden' }}>
+                  <Table size="sm" bordered responsive className="mb-3 align-middle rounded">
                     <thead className="table-light">
                       <tr>
                         <th><i className="bi bi-box-seam me-1 text-secondary"></i>Producto</th>
@@ -152,7 +233,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
               setStep(2);
             } else if (step === 2) {
               setValidated(true);
-              if (validateStep1() && validateStep2()) setStep(3);
+              if (isStep2Valid()) setStep(3);
             } else if (step === 3) {
               handleOrder(e);
             }
@@ -242,50 +323,50 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                       <Col md={6}>
                         <Form.Group controlId="name">
                           <Form.Label className="fw-semibold">Nombre completo</Form.Label>
-                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="name" value={form.name} onChange={handleChange} autoComplete="name" />
-                          <Form.Control.Feedback type="invalid">Introduce tu nombre</Form.Control.Feedback>
+                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="name" value={form.name} onChange={handleChange} isInvalid={!!errors.name} autoComplete="name" />
+                          {errors.name && <div className="text-danger" style={{ fontSize: 13 }}>{errors.name}</div>}
                         </Form.Group>
                       </Col>
                       <Col md={6}>
                         <Form.Group controlId="phone">
                           <Form.Label className="fw-semibold">Teléfono</Form.Label>
-                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="phone" value={form.phone} onChange={handleChange} autoComplete="tel" />
-                          <Form.Control.Feedback type="invalid">Introduce tu teléfono</Form.Control.Feedback>
+                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="phone" value={form.phone} onChange={handleChange} isInvalid={!!errors.phone} maxLength={9} autoComplete="tel" />
+                          {errors.phone && <div className="text-danger" style={{ fontSize: 13 }}>{errors.phone}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
                     <Form.Group controlId="address" className="mb-3">
                       <Form.Label className="fw-semibold">Dirección</Form.Label>
-                      <Form.Control required size="lg" className="rounded-pill shadow-sm" name="address" value={form.address} onChange={handleChange} autoComplete="street-address" />
-                      <Form.Control.Feedback type="invalid">Introduce tu dirección</Form.Control.Feedback>
+                      <Form.Control required size="lg" className="rounded-pill shadow-sm" name="address" value={form.address} onChange={handleChange} isInvalid={!!errors.address} autoComplete="street-address" />
+                      {errors.address && <div className="text-danger" style={{ fontSize: 13 }}>{errors.address}</div>}
                     </Form.Group>
                     <Row className="g-3 mb-2">
                       <Col md={5}>
                         <Form.Group controlId="city">
                           <Form.Label className="fw-semibold">Ciudad</Form.Label>
-                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="city" value={form.city} onChange={handleChange} autoComplete="address-level2" />
-                          <Form.Control.Feedback type="invalid">Introduce la ciudad</Form.Control.Feedback>
+                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="city" value={form.city} onChange={handleChange} isInvalid={!!errors.city} autoComplete="address-level2" />
+                          {errors.city && <div className="text-danger" style={{ fontSize: 13 }}>{errors.city}</div>}
                         </Form.Group>
                       </Col>
                       <Col md={4}>
                         <Form.Group controlId="province">
                           <Form.Label className="fw-semibold">Provincia</Form.Label>
-                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="province" value={form.province} onChange={handleChange} autoComplete="address-level1" />
-                          <Form.Control.Feedback type="invalid">Introduce la provincia</Form.Control.Feedback>
+                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="province" value={form.province} onChange={handleChange} isInvalid={!!errors.province} autoComplete="address-level1" />
+                          {errors.province && <div className="text-danger" style={{ fontSize: 13 }}>{errors.province}</div>}
                         </Form.Group>
                       </Col>
                       <Col md={3}>
                         <Form.Group controlId="postal">
                           <Form.Label className="fw-semibold">Código Postal</Form.Label>
-                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="postal" value={form.postal} onChange={handleChange} autoComplete="postal-code" />
-                          <Form.Control.Feedback type="invalid">Introduce el código postal</Form.Control.Feedback>
+                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="postal" value={form.postal} onChange={handleChange} isInvalid={!!errors.postal} autoComplete="postal-code" />
+                          {errors.postal && <div className="text-danger" style={{ fontSize: 13 }}>{errors.postal}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
                     <Form.Group controlId="email" className="mb-3">
                       <Form.Label className="fw-semibold">Email</Form.Label>
-                      <Form.Control required type="email" size="lg" className="rounded-pill shadow-sm" name="email" value={form.email} onChange={handleChange} autoComplete="email" />
-                      <Form.Control.Feedback type="invalid">Introduce un email válido</Form.Control.Feedback>
+                      <Form.Control required type="email" size="lg" className="rounded-pill shadow-sm" name="email" value={form.email} onChange={handleChange} isInvalid={!!errors.email} autoComplete="email" />
+                      {errors.email && <div className="text-danger" style={{ fontSize: 13 }}>{errors.email}</div>}
                     </Form.Group>
                   </div>
                 </div>
@@ -294,28 +375,37 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                     <h5 className="mb-4 fw-bold text-primary-emphasis">Método de pago</h5>
                     <Form.Group controlId="card" className="mb-3">
                       <Form.Label className="fw-semibold">Número de tarjeta</Form.Label>
-                      <Form.Control required size="lg" className="rounded-pill shadow-sm" name="card" value={form.card} onChange={handleChange} maxLength={16} minLength={16} pattern="\d{16}" placeholder="1234 5678 9012 3456" autoComplete="cc-number" />
-                      <Form.Control.Feedback type="invalid">Introduce los 16 dígitos</Form.Control.Feedback>
+                      <Form.Control required size="lg" className="rounded-pill shadow-sm" name="card" value={form.card} 
+                      onChange={e => {
+                        let val = e.target.value.replace(/[^\d]/g, '').slice(0,16);
+                        val = val.replace(/(.{4})/g, '$1 ').trim();
+                        handleChange({ target: { name: 'card', value: val } });
+                      }} 
+                      isInvalid={!!errors.card} 
+                      maxLength={19} 
+                      placeholder="1234 5678 9012 3456" 
+                      autoComplete="cc-number" />
+                      {errors.card && <div className="text-danger" style={{ fontSize: 13 }}>{errors.card}</div>}
                     </Form.Group>
                     <Row className="g-3">
                       <Col md={6}>
                         <Form.Group controlId="expiry">
                           <Form.Label className="fw-semibold">Fecha caducidad (MM/AA)</Form.Label>
-                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="expiry" value={form.expiry} onChange={handleChange} placeholder="MM/AA" pattern="^(0[1-9]|1[0-2])/(\d{2})$" autoComplete="cc-exp" />
-                          <Form.Control.Feedback type="invalid">Formato MM/AA</Form.Control.Feedback>
+                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="expiry" value={form.expiry} onChange={handleChange} isInvalid={!!errors.expiry} placeholder="MM/AA" pattern="^(0[1-9]|1[0-2])/(\d{2})$" autoComplete="cc-exp" />
+                          {errors.expiry && <div className="text-danger" style={{ fontSize: 13 }}>{errors.expiry}</div>}
                         </Form.Group>
                       </Col>
                       <Col md={6}>
                         <Form.Group controlId="cvv">
                           <Form.Label className="fw-semibold">CVV</Form.Label>
-                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="cvv" value={form.cvv} onChange={handleChange} maxLength={3} minLength={3} pattern="\d{3}" placeholder="123" autoComplete="cc-csc" />
-                          <Form.Control.Feedback type="invalid">3 dígitos</Form.Control.Feedback>
+                          <Form.Control required size="lg" className="rounded-pill shadow-sm" name="cvv" value={form.cvv} onChange={handleChange} isInvalid={!!errors.cvv} maxLength={4} minLength={3} pattern="\d{3,4}" placeholder="123" autoComplete="cc-csc" />
+                          {errors.cvv && <div className="text-danger" style={{ fontSize: 13 }}>{errors.cvv}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
                     <div className="d-flex justify-content-between mt-4">
                       <Button variant="secondary" onClick={() => { setStep(1); setValidated(false); }} className="fw-bold px-4 py-2 rounded-pill shadow">Atrás</Button>
-                      <Button variant="primary" type="submit" className="fw-bold px-4 py-2 rounded-pill shadow" onClick={() => setStep(3)}>Siguiente</Button>
+                      <Button variant="primary" type="submit" className="fw-bold px-4 py-2 rounded-pill shadow" disabled={!isStep1Valid()}>Siguiente</Button>
                     </div>
                   </div>
                 </div>
@@ -340,6 +430,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                     <Table hover responsive className="mb-0 align-middle" style={{ borderRadius: 12, overflow: 'hidden' }}>
                       <thead className="table-light">
                         <tr>
+                          <th>Imagen</th>
                           <th>Producto</th>
                           <th className="text-center">Cantidad</th>
                           <th className="text-end">Precio</th>
@@ -354,6 +445,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                           const subtotal = typeof item.total === 'number' ? item.total : precio * (item.qty || 1);
                           return (
                             <tr key={prod.id || idx}>
+                              <td><img src={prod.image || prod.imagen || '/placeholder.png'} alt={nombre} style={{ width: 50, height: 50, objectFit: 'cover' }} /></td>
                               <td>{nombre}</td>
                               <td className="text-center">{item.qty || 1}</td>
                               <td className="text-end">{precio.toFixed(2)} €</td>
@@ -387,4 +479,3 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
     </Modal>
   );
 }
-

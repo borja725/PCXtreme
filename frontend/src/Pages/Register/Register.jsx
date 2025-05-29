@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import styles from '../Login/loginCard.module.css';
 import { useNavigate } from 'react-router-dom';
 const logoUrl = "../../public/logo.png";
@@ -9,11 +10,24 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError("La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -22,7 +36,7 @@ export default function Register() {
       const response = await fetch("http://localhost:8000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password, confirmPassword })
       });
       const data = await response.json();
       if (response.ok) {
@@ -83,15 +97,73 @@ export default function Register() {
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="registerPassword">
-                <Form.Label>Contraseña</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                  placeholder="Introduce tu contraseña"
-                />
-              </Form.Group>
+  <Form.Label>Contraseña</Form.Label>
+  <div style={{ position: 'relative' }}>
+    <Form.Control
+      type={showPassword ? 'text' : 'password'}
+      value={password}
+      onChange={e => setPassword(e.target.value)}
+      required
+      placeholder="Introduce tu contraseña"
+    />
+    <span
+      onClick={() => setShowPassword(s => !s)}
+      style={{
+        position: 'absolute',
+        right: 12,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        cursor: 'pointer',
+        color: '#1976d2',
+        fontSize: 22,
+        userSelect: 'none',
+        zIndex: 2
+      }}
+      aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+    >
+      {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+    </span>
+  </div>
+  {password && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(password) && (
+    <div style={{ color: '#d32f2f', fontSize: 13, marginTop: 4 }}>
+      La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.
+    </div>
+  )}
+</Form.Group>
+<Form.Group className="mb-3" controlId="registerConfirmPassword">
+  <Form.Label>Confirmar contraseña</Form.Label>
+  <div style={{ position: 'relative' }}>
+    <Form.Control
+      type={showConfirmPassword ? 'text' : 'password'}
+      value={confirmPassword}
+      onChange={e => setConfirmPassword(e.target.value)}
+      required
+      placeholder="Confirmar contraseña"
+    />
+    <span
+      onClick={() => setShowConfirmPassword(s => !s)}
+      style={{
+        position: 'absolute',
+        right: 12,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        cursor: 'pointer',
+        color: '#1976d2',
+        fontSize: 22,
+        userSelect: 'none',
+        zIndex: 2
+      }}
+      aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+    >
+      {showConfirmPassword ? <MdVisibilityOff /> : <MdVisibility />}
+    </span>
+  </div>
+  {confirmPassword && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(confirmPassword) && (
+    <div style={{ color: '#d32f2f', fontSize: 13, marginTop: 4 }}>
+      La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.
+    </div>
+  )}
+</Form.Group>
               <Button type="submit" variant="primary" className="w-100 fw-bold mb-2" disabled={loading}>
                 {loading ? "Cargando..." : "Registrarse"}
               </Button>
