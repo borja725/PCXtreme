@@ -281,15 +281,15 @@ function DropdownSearchPanel({ search, navigate, anchorRef }) {
   let top = 60, left = 0, width = 400;
   if (anchor) {
     const rect = anchor.getBoundingClientRect();
-    top = rect.bottom + window.scrollY + 6;
-    left = rect.left + window.scrollX;
+    top = rect.bottom + 6;
+    left = rect.left;
     width = rect.width;
   }
 
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top,
         left,
         width: Math.max(width, 360),
