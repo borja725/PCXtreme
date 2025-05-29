@@ -110,7 +110,6 @@ export default function Login() {
               </Button>
             </Form>
             <hr />
-            <Button variant="outline-warning" className="w-100 mb-2 fw-bold">Iniciar sesión con Google</Button>
             <div className="text-center mt-2">
               ¿No tienes cuenta?
               <Button variant="link" className="p-0 ms-1 fw-semibold text-primary" onClick={() => navigate('/register')}>Regístrate</Button>

@@ -18,6 +18,7 @@ import FooterMinimal from '../components/Footers/FooterMinimal';
 function AppContent() {
   const location = useLocation();
   const hideHeader = location.pathname === '/login' || location.pathname === '/register';
+  const hideFooter = location.pathname === '/login' || location.pathname === '/register';
   return (
     <div className="App" style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
       {!hideHeader && <MainHeader />}
@@ -40,7 +41,8 @@ function AppContent() {
         <Route path="/producto/:id" element={<ProductoDetalle />} />
         </Routes>
       </div>
-      <FooterMinimal />
+      {!hideFooter && <FooterMinimal />}
+
     </div>
   );
 }

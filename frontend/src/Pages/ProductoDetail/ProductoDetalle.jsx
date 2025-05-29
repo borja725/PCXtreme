@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Spinner, Alert, Button, Badge } from 'react-bootstrap';
 import { useCart } from '../../components/CartContext/CartContext';
 import ResenasProducto from '../../components/Reseñas/ResenasProducto';
+import ResumenResenasProducto from '../../components/Reseñas/ResumenResenasProducto';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 
@@ -145,10 +146,11 @@ export default function ProductoDetalle() {
                 {producto.modelo && <span className="text-secondary small">· {producto.modelo}</span>}
                 {producto.tipo && <Badge bg="info" className="ms-2 text-light">{producto.tipo}</Badge>}
               </div>
-              <h1 className="fw-bold mb-4" style={{ fontSize: 40, lineHeight: 1.1 }}>{producto.nombre}</h1>
+              <h1 className="fw-bold mb-2" style={{ fontSize: 28, color: '#1976d2' }}>{producto.nombre}</h1>
+              <div className="mb-3" style={{ fontSize: 18, color: '#fbc02d', marginTop: 20 }}>
+                <ResumenResenasProducto productId={producto.id} />
+              </div>
               <div className="mb-4 d-flex align-items-center gap-3">
-                <span className="fw-bold text-warning" style={{ fontSize: 24 }}>{'★'.repeat(Math.round(producto.valoracion || 0))}{'☆'.repeat(5 - Math.round(producto.valoracion || 0))}</span>
-                <span style={{ color: '#888', fontSize: 17 }}>{producto.valoracion ? producto.valoracion.toFixed(2) + ' / 5' : 'Sin valoraciones'}</span>
                 {producto.opiniones && <span className="text-primary small">({producto.opiniones} opiniones)</span>}
               </div>
               {producto.descripcion && (

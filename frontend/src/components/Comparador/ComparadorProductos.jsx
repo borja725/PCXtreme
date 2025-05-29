@@ -9,9 +9,15 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
   const mostrarKeys = ['nombre', 'precio', 'marca', 'modelo'];
 
   useEffect(() => {
-    if (show && productos.length === 1 && categoria && subcategoria) {
+    if (show && productos.length === 1) {
       setLoading(true);
-      fetch(`/api/productos?categoria=${encodeURIComponent(categoria)}&subcategoria=${encodeURIComponent(subcategoria)}`)
+      let url = '';
+      if (categoria && subcategoria) {
+        url = `/api/productos?categoria=${encodeURIComponent(categoria)}&subcategoria=${encodeURIComponent(subcategoria)}`;
+      } else {
+        url = `/api/productos`;
+      }
+      fetch(url)
         .then(res => res.json())
         .then(data => {
           setAllProductos(data.filter(p => p.id !== productos[0].id));

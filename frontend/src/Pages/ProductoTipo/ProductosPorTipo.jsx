@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Row, Col, Spinner, Alert } from "react-bootstrap";
 import FiltrosProductos from "../../components/Filtros/FiltrosProductos";
+import ResenasProducto from '../../components/Reseñas/ResenasProducto';
+import ResumenResenasProducto from '../../components/Reseñas/ResumenResenasProducto';
 import styles from '../../components/ListaProductos/ListaProductos.module.css';
 import { useCart } from '../../components/CartContext/CartContext';
 import Container from '@mui/material/Container';
@@ -281,8 +283,7 @@ export default function ProductosPorTipo() {
                       <div style={{ flex: 1 }}>
                         <h5 className="card-title fw-semibold mb-1" style={{ fontSize: 16, color: '#222' }}>{prod.nombre}</h5>
                         <div className="mb-2" style={{ fontSize: 15, color: '#fbc02d' }}>
-                          <span>★★★★★</span>
-                          <span style={{ color: '#888', fontSize: 13, marginLeft: 4 }}>(0)</span>
+                          <ResumenResenasProducto productId={prod.id} />
                         </div>
                         {prod.precioAnterior && (
                           <div style={{ fontSize: 14, color: '#888', textDecoration: 'line-through' }}>

@@ -169,10 +169,9 @@ export default function Register() {
               </Button>
             </Form>
             <hr />
-            <Button variant="outline-warning" className="w-100 mb-2 fw-bold">Regístrate con Google</Button>
             <div className="text-center mt-2">
               ¿Ya tienes cuenta?
-              <Button variant="link" className="p-0 ms-1 fw-semibold text-primary" onClick={() => navigate('/login')}>Inicia sesión</Button>
+              <Button variant="link" className="p-0 ms-1 mb-1.5 fw-semibold text-primary" onClick={() => navigate('/login')}>Inicia sesión</Button>
             </div>
           </Card>
         </Col>
