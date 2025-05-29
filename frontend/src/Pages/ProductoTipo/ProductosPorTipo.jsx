@@ -163,7 +163,7 @@ export default function ProductosPorTipo() {
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,
           padding: '12px 38px',
-          margin: '0 0 30px 0',
+          margin: '20px 0 30px 0',
           width: '100%',
           maxWidth: '100%',
           minHeight: 56,
@@ -390,7 +390,7 @@ export default function ProductosPorTipo() {
           </Row>
           {alert && <Alert variant={alert.type} className="mt-3">{alert.message}</Alert>}
           {!loading && productosFiltrados.length > 0 && (
-            <div className="d-flex justify-content-center align-items-center mt-4">
+            <div className="d-flex justify-content-center align-items-center mt-4 mb-4">
               <nav>
                 <ul className="pagination pagination-lg mb-0">
                   <li className={`page-item${paginaActual === 1 ? ' disabled' : ''}`}>
