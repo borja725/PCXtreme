@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Alert, Image } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { getUserName, getToken, removeToken, setToken } from '../../utils/auth';
+import { getToken, removeToken, setToken } from '../../utils/auth';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -35,12 +35,6 @@ export default function Profile() {
     };
     fetchProfile();
   }, []);
-
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setProfileImage(e.target.files[0]);
-    }
-  };
 
   const handleSave = async () => {
     setLoading(true);
@@ -128,7 +122,7 @@ export default function Profile() {
   };
 
   return (
-    <Container fluid className="min-vh-100 d-flex align-items-center justify-content-center p-0" style={{background: 'linear-gradient(135deg, #f5faff 0%, #1976d2 100%)'}}>
+    <Container fluid className="min-vh-100 d-flex align-items-center justify-content-center p-0" style={{ background: 'linear-gradient(135deg, #f5faff 0%, #1976d2 100%)' }}>
       <Row className="w-100 justify-content-center">
         <Col xs={12} md={10} lg={8} xl={6} className="bg-white rounded shadow p-4 mt-5 mb-5">
           <h2 className="mb-4 text-primary">Mi Perfil</h2>

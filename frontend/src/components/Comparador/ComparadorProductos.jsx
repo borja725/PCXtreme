@@ -8,14 +8,12 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
   const [loading, setLoading] = useState(false);
   const mostrarKeys = ['nombre', 'precio', 'marca', 'modelo'];
 
-  // Cargar productos de la misma categoría/subcategoría (solo si hay uno seleccionado)
   useEffect(() => {
     if (show && productos.length === 1 && categoria && subcategoria) {
       setLoading(true);
       fetch(`/api/productos?categoria=${encodeURIComponent(categoria)}&subcategoria=${encodeURIComponent(subcategoria)}`)
         .then(res => res.json())
         .then(data => {
-          // Excluir el producto ya seleccionado
           setAllProductos(data.filter(p => p.id !== productos[0].id));
           setLoading(false);
         });
@@ -26,7 +24,6 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
     }
   }, [show, productos, categoria, subcategoria]);
 
-  // Filtrar resultados
   useEffect(() => {
     if (busqueda && allProductos.length > 0) {
       setResultados(
@@ -50,11 +47,11 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
           <Table bordered responsive>
             <thead>
               <tr>
-                <th style={{textAlign: 'center', justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%'}}>Características</th>
+                <th style={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%' }}>Características</th>
                 {productos.map((prod, idx) => (
                   <th key={prod.id || idx}>
                     {prod.nombre}
-                    <Button variant="link" size="sm" onClick={() => onRemove(prod.id)} style={{color: '#d32f2f'}} title="Quitar">✕</Button>
+                    <Button variant="link" size="sm" onClick={() => onRemove(prod.id)} style={{ color: '#d32f2f' }} title="Quitar">✕</Button>
                   </th>
                 ))}
               </tr>
@@ -62,7 +59,7 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
             <tbody>
               {mostrarKeys.map(key => (
                 <tr key={key}>
-                  <td style={{fontWeight: 'bold', textTransform: 'capitalize'}}>{key}</td>
+                  <td style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{key}</td>
                   {productos.map((prod, idx) => (
                     <td key={prod.id || idx}>{prod[key]}</td>
                   ))}
@@ -78,7 +75,6 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
     );
   }
 
-  // Si solo hay un producto seleccionado, mostrar especificaciones + buscador
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
@@ -86,23 +82,21 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
       </Modal.Header>
       <Modal.Body>
         <div className="row">
-          {/* Izquierda: especificaciones del producto */}
           <div className="col-md-6 border-end">
             <h5 className="fw-bold mb-3">{productos[0].nombre}</h5>
             <Table bordered size="sm">
               <tbody>
                 {mostrarKeys.map(key => (
                   <tr key={key}>
-                    <td className="fw-semibold" style={{width: 120, textTransform: 'capitalize'}}>{key}</td>
+                    <td className="fw-semibold" style={{ width: 120, textTransform: 'capitalize' }}>{key}</td>
                     <td>{productos[0][key]}</td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-            <Button variant="link" size="sm" onClick={() => onRemove(productos[0].id)} style={{color: '#d32f2f'}} title="Quitar">Quitar producto</Button>
+            <Button variant="link" size="sm" onClick={() => onRemove(productos[0].id)} style={{ color: '#d32f2f' }} title="Quitar">Quitar producto</Button>
           </div>
 
-          {/* Derecha: buscador y resultados */}
           <div className="col-md-6">
             <h6 className="fw-semibold">Buscar producto para comparar</h6>
             <InputGroup className="mb-2">
@@ -115,15 +109,13 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
               />
             </InputGroup>
             {loading && <Spinner animation="border" size="sm" />}
-            <ListGroup style={{maxHeight: 220, overflowY: 'auto'}}>
+            <ListGroup style={{ maxHeight: 220, overflowY: 'auto' }}>
               {resultados.map(prod => (
                 <ListGroup.Item
                   key={prod.id}
                   action
                   onClick={() => {
-                    // Añadir el producto al comparador
                     if (typeof window !== 'undefined' && window.dispatchEvent) {
-                      // Emite evento para que ListaProductosGenerica añada este producto
                       window.dispatchEvent(new CustomEvent('comparar:add', { detail: prod }));
                     }
                   }}

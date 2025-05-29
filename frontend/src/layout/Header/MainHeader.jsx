@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useCart } from '../../components/CartContext/CartContext';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import { getUserName, getToken } from '../../utils/auth';
-  
+
 const logoUrl = "../../public/logo.png";
 import SidebarMenu from '../../components/SidebarMenu/SidebarMenu';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -29,7 +29,7 @@ function MainHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
-  const searchInputRef = React.useRef(null);
+  const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -48,9 +48,7 @@ function MainHeader() {
     };
   }, []);
 
-  // Overlay: fetch y cerrar
-  React.useEffect(() => {
-    // Solo buscar si el overlay está abierto y hay texto en el input del header
+  useEffect(() => {
     if (searchOpen && search && search.trim()) {
       setSearchLoading(true);
       fetch(`/api/productos?q=${encodeURIComponent(search)}`)
@@ -65,7 +63,7 @@ function MainHeader() {
     }
   }, [search, searchOpen]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (searchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
     }
@@ -78,17 +76,17 @@ function MainHeader() {
     <>
       <AppBar position="sticky" color="inherit" elevation={0} sx={{ width: '100%', boxShadow: 'none', zIndex: 1000 }}>
         <Toolbar sx={{ justifyContent: 'space-between', width: '100%', p: 0, borderBottom: '1px solid #e0e0e0' }}>
-          <Container  maxWidth="xl" disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 84 }}>
+          <Container maxWidth="xl" disableGutters sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 84 }}>
             <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setSidebarOpen(true)}>
               <MenuIcon />
             </IconButton>
             <SidebarMenu show={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-            <Box sx={{ display: 'flex', width: '17%' , justifyContent: 'center'}}>
+            <Box sx={{ display: 'flex', width: '17%', justifyContent: 'center' }}>
               <button
                 style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
                 onClick={() => navigate('/')}
               >
-                <img style={{ width: 10, height: 10, scale: 20}} src={logoUrl} alt="PC Xtreme"/>
+                <img style={{ width: 10, height: 10, scale: 20 }} src={logoUrl} alt="PC Xtreme" />
               </button>
             </Box>
             <Paper
@@ -209,7 +207,7 @@ function MainHeader() {
               </Link>
               <Link to="/productos/PYPC/Refrigeracion" style={{ textDecoration: 'none' }}>
                 <Typography variant="body2" sx={{ color: '#1976d2', fontWeight: 700, cursor: 'pointer' }}>
-                  Refrigeración                
+                  Refrigeración
                 </Typography>
               </Link>
               <Link to="/productos/PYPC/SSD" style={{ textDecoration: 'none' }}>
@@ -226,16 +224,16 @@ function MainHeader() {
           </Container>
         </Box>
       </AppBar>
-      
+
     </>
   );
 }
 
 function DropdownSearchPanel({ search, navigate, anchorRef }) {
-  const [productos, setProductos] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [fetched, setFetched] = React.useState(false);
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [fetched, setFetched] = useState(false);
 
   React.useEffect(() => {
     if (!fetched) {

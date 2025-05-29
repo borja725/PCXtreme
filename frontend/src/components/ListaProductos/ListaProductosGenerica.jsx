@@ -8,6 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './ListaProductos.module.css';
 import ComparadorProductos from '../Comparador/ComparadorProductos';
 
+
 function sumarDiasLaborables(fecha, dias) {
   let resultado = new Date(fecha);
   let sumados = 0;
@@ -30,13 +31,11 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
   const [comparar, setComparar] = useState([]);
   const [showComparador, setShowComparador] = useState(false);
 
-  // Permitir añadir producto desde el buscador del comparador
   useEffect(() => {
     function handleAdd(event) {
       const prod = event.detail;
       setComparar(prev => {
         if (prev.length < 4 && !prev.some(p => p.id === prod.id)) {
-          // Abrir modal si ahora hay dos
           if (prev.length === 1) setShowComparador(true);
           return [...prev, prod];
         }
@@ -47,25 +46,16 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
     return () => window.removeEventListener('comparar:add', handleAdd);
   }, []);
 
-  // Añadir o quitar producto de la lista de comparación
   const toggleComparar = (producto) => {
     setComparar(prev => {
       if (prev.some(p => p.id === producto.id)) {
         return prev.filter(p => p.id !== producto.id);
       } else {
-        // Limitar a 4 productos
         if (prev.length >= 4) return prev;
-        // Abrir modal solo cuando haya exactamente 1 seleccionado y se añade el segundo
         if (prev.length === 1) setShowComparador(true);
         return [...prev, producto];
       }
     });
-  };
-
-
-
-  const removeFromComparar = (id) => {
-    setComparar(prev => prev.filter(p => p.id !== id));
   };
 
   const navigate = useNavigate();
@@ -75,9 +65,12 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
   const [error, setError] = useState(null);
   const [loadingAdd, setLoadingAdd] = useState({});
   const [alert, setAlert] = useState(null);
-  // Nuevo estado para feedback tipo toast
   const [showToast, setShowToast] = useState(false);
   const [toastContent, setToastContent] = useState({});
+
+  const removeFromComparar = (id) => {
+    setComparar(prev => prev.filter(p => p.id !== id));
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -134,17 +127,10 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
           </Link>
         )}
       </div>
-      <style>{`
-        .ver-mas-link:hover {
-          color: #1976d2 !important;
-          text-decoration: underline;
-          transform: translateX(2px) scale(1.04);
-        }
-      `}</style>
       {loading && <Spinner animation="border" />}
       {error && <Alert variant="danger">{error}</Alert>}
       {alert && <Alert variant={alert.type}>{alert.message}</Alert>}
-      <Row className="g-4 w-100 m-0" style={{width: '100%'}}>
+      <Row className="g-4 w-100 m-0" style={{ width: '100%' }}>
         {productos.map((prod) => (
           <Col xs={12} sm={6} md={4} lg={3} xl={2} className="d-flex" key={prod.id}>
             <div
@@ -169,7 +155,6 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                 e.currentTarget.style.transform = '';
               }}
             >
-              {/* Botón comparar */}
               <Button
                 variant={comparar.some(p => p.id === prod.id) ? 'primary' : 'outline-primary'}
                 size="sm"
@@ -206,130 +191,129 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                 />
               </div>
               <div className="card-body d-flex flex-column p-3" style={{ height: '65%' }} onClick={() => navigate(`/producto/${prod.id}`)}>
-              <div style={{ flex: 1 }}
-              onClick={e => {
-                if (e.target.closest('button')) return;
-                navigate(`/producto/${prod.id}`);
-              }}
-              >
-                <h5 className="card-title fw-semibold mb-1" style={{ fontSize: 16, color: '#222' }}>{prod.nombre}</h5>
-                <div className="mb-2" style={{ fontSize: 15, color: '#fbc02d', display: 'flex', alignItems: 'center' }}>
-                  {(() => {
-                    const rating = prod.mediaResenas || 0;
-                    const total = 5;
-                    const fullStars = Math.floor(rating);
-                    const halfStar = rating - fullStars >= 0.5;
-                    const emptyStars = total - fullStars - (halfStar ? 1 : 0);
-                    return (
-                      <>
-                        {[...Array(fullStars)].map((_, i) => <span key={"full"+i}>★</span>)}
-                        {halfStar && <span key="half">☆</span>}
-                        {[...Array(emptyStars)].map((_, i) => <span key={"empty"+i}>☆</span>)}
-                        <span style={{ color: '#888', fontSize: 13, marginLeft: 4 }}>({prod.numResenas || 0})</span>
-                      </>
-                    );
-                  })()}
-                </div>
-                {prod.precioAnterior && (
-                  <div style={{ fontSize: 14, color: '#888', textDecoration: 'line-through' }}>
-                    {prod.precioAnterior} €
-                  </div>
-                )}
-              </div>
-              <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-                <div className="fw-bold mb-1" style={{ fontSize: 22, color: '#1976d2' }}>
-                  {prod.precio} €
-                </div>
-                <div style={{ fontSize: 13, color: '#2e7d32', marginBottom: 6 }}>
-                  Recíbelo el {obtenerTextoEntrega()}
-                </div>
-                <button
-                  className={styles.addButton + " rounded-pill w-100 fw-semibold shadow-sm d-flex align-items-center justify-content-center"}
-                  disabled={prod.stock <= 0 || (prod.id && loadingAdd[prod.id])}
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    setLoadingAdd(prev => ({...prev, [prod.id]: true}));
-                    try {
-                      const token = localStorage.getItem('jwt');
-                      const headers = { 'Content-Type': 'application/json' };
-                      if (token) {
-                        headers['Authorization'] = `Bearer ${token}`;
-                      }
-                      const res = await fetch(`http://localhost:8000/api/cart/add`, {
-                        method: 'POST',
-                        headers,
-                        credentials: 'include',
-                        body: JSON.stringify({ productId: prod.id, qty: 1 })
-                      });
-                      const data = await res.json();
-                      if (!res.ok) {
-                        setAlert({ type: 'danger', message: data.error || 'No se pudo añadir al carrito.' });
-                        setToastContent({
-                          success: false,
-                          message: data.error || 'No se pudo añadir al carrito.'
-                        });
-                        setShowToast(true);
-                      } else {
-                        setCart(data);
-                        setToastContent({
-                          success: true,
-                          nombre: prod.nombre,
-                          img: prod.imagen || prod.img || '',
-                          message: 'Producto añadido al carrito',
-                          verCarrito: true
-                        });
-                        setShowToast(true);
-                      }
-                    } catch (err) {
-                      setAlert({ type: 'danger', message: 'Error de red al añadir al carrito.' });
-                      setToastContent({
-                        success: false,
-                        message: 'Error de red al añadir al carrito.'
-                      });
-                      setShowToast(true);
-                    } finally {
-                      setLoadingAdd(prev => ({...prev, [prod.id]: false}));
-                      setTimeout(() => setAlert(null), 2500);
-                    }
-                  }}
-                  style={{
-                    fontSize: 15,
-                    marginTop: 6,
-                    padding: '10px 0',
-                    transition: 'background 0.18s, box-shadow 0.18s',
-                    boxShadow: '0 2px 8px #1976d233',
+                <div style={{ flex: 1 }}
+                  onClick={e => {
+                    if (e.target.closest('button')) return;
+                    navigate(`/producto/${prod.id}`);
                   }}
                 >
-                  {loadingAdd && loadingAdd[prod.id] ? (
-                    <span className="spinner-border spinner-border-sm me-2" />
-                  ) : (
-                    <ShoppingCartIcon style={{ fontSize: 21, marginRight: 7, color: '#1976d2' }} />
+                  <h5 className="card-title fw-semibold mb-1" style={{ fontSize: 16, color: '#222' }}>{prod.nombre}</h5>
+                  <div className="mb-2" style={{ fontSize: 15, color: '#fbc02d', display: 'flex', alignItems: 'center' }}>
+                    {(() => {
+                      const rating = prod.mediaResenas || 0;
+                      const total = 5;
+                      const fullStars = Math.floor(rating);
+                      const halfStar = rating - fullStars >= 0.5;
+                      const emptyStars = total - fullStars - (halfStar ? 1 : 0);
+                      return (
+                        <>
+                          {[...Array(fullStars)].map((_, i) => <span key={"full" + i}>★</span>)}
+                          {halfStar && <span key="half">☆</span>}
+                          {[...Array(emptyStars)].map((_, i) => <span key={"empty" + i}>☆</span>)}
+                          <span style={{ color: '#888', fontSize: 13, marginLeft: 4 }}>({prod.numResenas || 0})</span>
+                        </>
+                      );
+                    })()}
+                  </div>
+                  {prod.precioAnterior && (
+                    <div style={{ fontSize: 14, color: '#888', textDecoration: 'line-through' }}>
+                      {prod.precioAnterior} €
+                    </div>
                   )}
-                  <span>
-                    {prod.stock > 0 ? 'Añadir' : 'Sin stock'}
-                  </span>
-                  {/* Badge si ya está en el carrito */}
-                  {cart && cart.items && cart.items.some(item => item.product.id === prod.id) && (
-                    <span style={{
-                      background: '#1976d2',
-                      color: '#fff',
-                      borderRadius: '50%',
-                      fontSize: 12,
-                      marginLeft: 8,
-                      minWidth: 22,
-                      minHeight: 22,
-                      padding: '0 7px',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 700
-                    }}>
-                      {cart.items.find(item => item.product.id === prod.id)?.qty || 1}
+                </div>
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: 22, color: '#1976d2' }}>
+                    {prod.precio} €
+                  </div>
+                  <div style={{ fontSize: 13, color: '#2e7d32', marginBottom: 6 }}>
+                    Recíbelo el {obtenerTextoEntrega()}
+                  </div>
+                  <button
+                    className={styles.addButton + " rounded-pill w-100 fw-semibold shadow-sm d-flex align-items-center justify-content-center"}
+                    disabled={prod.stock <= 0 || (prod.id && loadingAdd[prod.id])}
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      setLoadingAdd(prev => ({ ...prev, [prod.id]: true }));
+                      try {
+                        const token = localStorage.getItem('jwt');
+                        const headers = { 'Content-Type': 'application/json' };
+                        if (token) {
+                          headers['Authorization'] = `Bearer ${token}`;
+                        }
+                        const res = await fetch(`http://localhost:8000/api/cart/add`, {
+                          method: 'POST',
+                          headers,
+                          credentials: 'include',
+                          body: JSON.stringify({ productId: prod.id, qty: 1 })
+                        });
+                        const data = await res.json();
+                        if (!res.ok) {
+                          setAlert({ type: 'danger', message: data.error || 'No se pudo añadir al carrito.' });
+                          setToastContent({
+                            success: false,
+                            message: data.error || 'No se pudo añadir al carrito.'
+                          });
+                          setShowToast(true);
+                        } else {
+                          setCart(data);
+                          setToastContent({
+                            success: true,
+                            nombre: prod.nombre,
+                            img: prod.imagen || prod.img || '',
+                            message: 'Producto añadido al carrito',
+                            verCarrito: true
+                          });
+                          setShowToast(true);
+                        }
+                      } catch (err) {
+                        setAlert({ type: 'danger', message: 'Error de red al añadir al carrito.' });
+                        setToastContent({
+                          success: false,
+                          message: 'Error de red al añadir al carrito.'
+                        });
+                        setShowToast(true);
+                      } finally {
+                        setLoadingAdd(prev => ({ ...prev, [prod.id]: false }));
+                        setTimeout(() => setAlert(null), 2500);
+                      }
+                    }}
+                    style={{
+                      fontSize: 15,
+                      marginTop: 6,
+                      padding: '10px 0',
+                      transition: 'background 0.18s, box-shadow 0.18s',
+                      boxShadow: '0 2px 8px #1976d233',
+                    }}
+                  >
+                    {loadingAdd[prod.id] ? (
+                      <span className="spinner-border spinner-border-sm me-2" />
+                    ) : (
+                      <ShoppingCartIcon style={{ fontSize: 21, marginRight: 7, color: '#1976d2' }} />
+                    )}
+                    <span>
+                      {prod.stock > 0 ? 'Añadir' : 'Sin stock'}
                     </span>
-                  )}
-                </button>
+                    {cart && cart.items && cart.items.some(item => item.product.id === prod.id) && (
+                      <span style={{
+                        background: '#1976d2',
+                        color: '#fff',
+                        borderRadius: '50%',
+                        fontSize: 12,
+                        marginLeft: 8,
+                        minWidth: 22,
+                        minHeight: 22,
+                        padding: '0 7px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700
+                      }}>
+                        {cart.items.find(item => item.product.id === prod.id)?.qty || 1}
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
             </div>
           </Col>
         ))}
@@ -337,35 +321,32 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
       {!loading && productos.length === 0 && (
         <Alert variant="info" className="mt-4">No hay productos disponibles.</Alert>
       )}
-    {/* Botón flotante para abrir comparador */}
-    {comparar.length > 0 && (
-      <Button
-        variant="success"
-        style={{
-          position: 'fixed',
-          bottom: 32,
-          right: 32,
-          zIndex: 1050,
-          borderRadius: 30,
-          boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-          fontWeight: 600,
-          padding: '12px 22px',
-        }}
-        onClick={() => setShowComparador(true)}
-      >
-        Comparar ({comparar.length})
-      </Button>
-    )}
-    {/* Modal comparador */}
-    <ComparadorProductos
-      productos={comparar}
-      show={showComparador}
-      onHide={() => setShowComparador(false)}
-      onRemove={removeFromComparar}
-      categoria={categoria}
-      subcategoria={subcategoria}
-    />
-      {/* Toast tipo tienda real */}
+      {comparar.length > 0 && (
+        <Button
+          variant="success"
+          style={{
+            position: 'fixed',
+            bottom: 32,
+            right: 32,
+            zIndex: 1050,
+            borderRadius: 30,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+            fontWeight: 600,
+            padding: '12px 22px',
+          }}
+          onClick={() => setShowComparador(true)}
+        >
+          Comparar ({comparar.length})
+        </Button>
+      )}
+      <ComparadorProductos
+        productos={comparar}
+        show={showComparador}
+        onHide={() => setShowComparador(false)}
+        onRemove={removeFromComparar}
+        categoria={categoria}
+        subcategoria={subcategoria}
+      />
       <Snackbar
         open={showToast}
         autoHideDuration={2800}

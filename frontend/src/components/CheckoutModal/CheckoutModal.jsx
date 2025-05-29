@@ -7,6 +7,7 @@ function randomOrderNumber() {
 }
 
 export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
+  const { cart, setCart } = useCart();
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
   const [orderNumber, setOrderNumber] = useState(null);
@@ -80,7 +81,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
   };
 
   const isStep1Valid = () => {
-    const required = ['name','phone','address','city','province','postal','email'];
+    const required = ['name', 'phone', 'address', 'city', 'province', 'postal', 'email'];
     let valid = true;
     required.forEach(field => {
       const err = validateField(field, form[field]);
@@ -91,34 +92,13 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
 
   const isStep2Valid = () => {
     if (!form.card || form.card.replace(/\s/g, '').length !== 16) return false;
-    const required = ['card','expiry','cvv'];
+    const required = ['card', 'expiry', 'cvv'];
     let valid = true;
     required.forEach(field => {
       const err = validateField(field, form[field]);
       if (err) valid = false;
     });
     return valid;
-  };
-
-  const { cart, setCart } = useCart();
-
-
-
-  const validateStep1 = () => {
-    return form.name && form.address && form.city && form.province && form.postal && form.phone && form.email;
-  };
-
-  const validateStep2 = () => {
-    return (/^\d{16}$/.test(form.card) && /^(0[1-9]|1[0-2])\/(\d{2})$/.test(form.expiry) && /^\d{3}$/.test(form.cvv));
-  };
-
-  const handleNext = e => {
-    e.preventDefault();
-    setValidated(true);
-    if (validateStep1()) {
-      setStep(2);
-      setValidated(false);
-    }
   };
 
   const handleOrder = e => {
@@ -161,7 +141,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                 step === 3 ? 'Confirmar pedido' : 'Finalizar pedido'}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ minHeight: 320, minWidth: '100%'}}>
+      <Modal.Body style={{ minHeight: 320, minWidth: '100%' }}>
         {loading ? (
           <div className="d-flex flex-column align-items-center justify-content-center py-5">
             <div className="spinner-border text-primary mb-3" style={{ width: 50, height: 50 }} role="status">
@@ -375,16 +355,16 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                     <h5 className="mb-4 fw-bold text-primary-emphasis">Método de pago</h5>
                     <Form.Group controlId="card" className="mb-3">
                       <Form.Label className="fw-semibold">Número de tarjeta</Form.Label>
-                      <Form.Control required size="lg" className="rounded-pill shadow-sm" name="card" value={form.card} 
-                      onChange={e => {
-                        let val = e.target.value.replace(/[^\d]/g, '').slice(0,16);
-                        val = val.replace(/(.{4})/g, '$1 ').trim();
-                        handleChange({ target: { name: 'card', value: val } });
-                      }} 
-                      isInvalid={!!errors.card} 
-                      maxLength={19} 
-                      placeholder="1234 5678 9012 3456" 
-                      autoComplete="cc-number" />
+                      <Form.Control required size="lg" className="rounded-pill shadow-sm" name="card" value={form.card}
+                        onChange={e => {
+                          let val = e.target.value.replace(/[^\d]/g, '').slice(0, 16);
+                          val = val.replace(/(.{4})/g, '$1 ').trim();
+                          handleChange({ target: { name: 'card', value: val } });
+                        }}
+                        isInvalid={!!errors.card}
+                        maxLength={19}
+                        placeholder="1234 5678 9012 3456"
+                        autoComplete="cc-number" />
                       {errors.card && <div className="text-danger" style={{ fontSize: 13 }}>{errors.card}</div>}
                     </Form.Group>
                     <Row className="g-3">
@@ -414,7 +394,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
             {step === 3 && (
               <>
                 <div className="card shadow-sm border-0 mb-4" style={{ background: '#f8fafc', borderRadius: 18 }}>
-                  <div className="card-header bg-white border-0 d-flex align-items-center gap-2 px-4 py-3" style={{borderTopLeftRadius:18, borderTopRightRadius:18}}>
+                  <div className="card-header bg-white border-0 d-flex align-items-center gap-2 px-4 py-3" style={{ borderTopLeftRadius: 18, borderTopRightRadius: 18 }}>
                     <i className="bi bi-clipboard-check text-success fs-4 me-2"></i>
                     <span className="fw-bold fs-5 text-success-emphasis">Confirmar pedido</span>
                   </div>
@@ -455,19 +435,19 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
                         })}
                       </tbody>
                     </Table>
-                    <div className="d-flex justify-content-end align-items-center mb-4 mt-3 pe-4" style={{gap: 18}}>
+                    <div className="d-flex justify-content-end align-items-center mb-4 mt-3 pe-4" style={{ gap: 18 }}>
                       <span className="fs-5 fw-bold text-secondary-emphasis">Total:</span>
                       <span className="fs-4 fw-bold text-primary shadow-sm px-4 py-2 rounded bg-light border border-1 border-primary-emphasis">{cart.total?.toFixed(2)} €</span>
                     </div>
                     <div className="d-flex justify-content-between mt-4">
                       <Button variant="secondary" onClick={() => setStep(2)} className="fw-bold px-4 py-2 rounded-pill shadow">Atrás</Button>
                       <Button variant="success" type="submit" className="fw-bold px-4 py-2 rounded-pill shadow" disabled={loading}>
-                      {loading ? (
-                        <span className="d-flex align-items-center"><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Procesando...</span>
-                      ) : (
-                        <><i className="bi bi-check-circle me-2"></i>Confirmar pedido</>
-                      )}
-                    </Button>
+                        {loading ? (
+                          <span className="d-flex align-items-center"><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Procesando...</span>
+                        ) : (
+                          <><i className="bi bi-check-circle me-2"></i>Confirmar pedido</>
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </div>

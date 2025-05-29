@@ -15,8 +15,7 @@ export default function PromoBanner() {
     >
       <Container maxWidth="xl" disableGutters>
         <div className="row align-items-center justify-content-center g-4 flex-nowrap">
-          {/* NVIDIA */}
-          <div className="col-12 col-md-6 d-flex flex-row align-items-center justify-content-center mb-4 mb-md-0" style={{gap: 28}}>
+          <div className="col-12 col-md-6 d-flex flex-row align-items-center justify-content-center mb-4 mb-md-0" style={{ gap: 28 }}>
             <div className="glass-card p-4" style={{
               background: 'rgba(28,40,48,0.72)',
               borderRadius: '1.5rem',
@@ -26,7 +25,7 @@ export default function PromoBanner() {
               border: '1.5px solid rgba(255,255,255,0.13)',
               maxWidth: '100%',
               width: '100%',
-              
+
             }}>
               <h1 className="fw-bold mb-2" style={{
                 color: '#1fd219',
@@ -46,8 +45,8 @@ export default function PromoBanner() {
               }}>
                 Siente la potencia de la tecnología Nvidia con nuestros productos seleccionados.
               </h4>
-              <div className="d-flex flex-row align-items-center justify-content-between mt-3" style={{gap: 16}}>
-                <a href="/productos/Nvidia" className="btn btn-lg promo-btn-glass" style={{
+              <div className="d-flex flex-row align-items-center justify-content-between mt-3" style={{ gap: 16 }}>
+                <a href="/productos/PYPC" className="btn btn-lg promo-btn-glass" style={{
                   fontWeight: 700,
                   fontSize: '1.09rem',
                   padding: '12px 30px',
@@ -64,7 +63,7 @@ export default function PromoBanner() {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-6 d-flex flex-row align-items-center justify-content-center" style={{gap: 28}}>
+          <div className="col-12 col-md-6 d-flex flex-row align-items-center justify-content-center" style={{ gap: 28 }}>
             <div className="glass-card p-4" style={{
               background: 'rgba(48,28,28,0.72)',
               borderRadius: '1.5rem',
@@ -94,7 +93,7 @@ export default function PromoBanner() {
               }}>
                 Descubre la potencia y eficiencia de AMD en nuestra tienda.
               </h4>
-              <div className="d-flex flex-row align-items-center justify-content-between mt-3" style={{gap: 16}}>
+              <div className="d-flex flex-row align-items-center justify-content-between mt-3" style={{ gap: 16 }}>
                 <a href="/productos/PYPC" className="btn btn-lg promo-btn-glass-amd" style={{
                   fontWeight: 700,
                   fontSize: '1.09rem',

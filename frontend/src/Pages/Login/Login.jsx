@@ -42,25 +42,25 @@ export default function Login() {
   };
 
   return (
-    <Container fluid className="min-vh-100 p-0" style={{background: '#f3f3f3'}}>
+    <Container fluid className="min-vh-100 p-0" style={{ background: '#f3f3f3' }}>
       <Row className="g-0 min-vh-100">
-        <Col md={5} className="d-none d-md-flex flex-column align-items-center justify-content-center" style={{background: 'linear-gradient(135deg, #1976d2 0%, rgb(0,0,0) 100%)', color: '#fff', minHeight: '100vh', padding: '48px 0'}}>
+        <Col md={5} className="d-none d-md-flex flex-column align-items-center justify-content-center" style={{ background: 'linear-gradient(135deg, #1976d2 0%, rgb(0,0,0) 100%)', color: '#fff', minHeight: '100vh', padding: '48px 0' }}>
           <button
             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
             onClick={() => navigate('/')}
           >
             <img src={logoUrl} alt="PC Xtreme" style={{ width: 60, marginBottom: 60, scale: 8, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.10))' }} />
           </button>
-          <h2 className="fw-bold mb-3" style={{letterSpacing: 1}}>¡Identifícate o crea una nueva cuenta!</h2>
-          <ul className="list-unstyled" style={{fontSize: 22, lineHeight: 2}}>
+          <h2 className="fw-bold mb-3" style={{ letterSpacing: 1 }}>¡Identifícate o crea una nueva cuenta!</h2>
+          <ul className="list-unstyled" style={{ fontSize: 22, lineHeight: 2 }}>
             <li>✔ Accede a ofertas exclusivas y personalizadas.</li>
             <li>✔ Consulta tu historial de compras.</li>
             <li>✔ Accede a compra de productos.</li>
             <li>✔ Guarda tus configuraciones y listas.</li>
           </ul>
         </Col>
-        <Col xs={12} md={7} className="d-flex align-items-center justify-content-center" style={{minHeight: '100vh', background: '#fff'}}>
-          <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{maxWidth: 400, borderRadius: 16}}>
+        <Col xs={12} md={7} className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: '#fff' }}>
+          <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{ maxWidth: 400, borderRadius: 16 }}>
             <h4 className="mb-3 text-primary fw-bold">Inicia sesión</h4>
             {success && <Alert variant="success">¡Sesión iniciada correctamente!</Alert>}
             {error && <Alert variant="danger">{error}</Alert>}
@@ -118,8 +118,8 @@ export default function Login() {
           </Card>
         </Col>
       </Row>
-</Container>
-);
+    </Container>
+  );
 }
 
 

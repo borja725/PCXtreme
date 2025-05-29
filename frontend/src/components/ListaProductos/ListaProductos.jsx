@@ -5,29 +5,10 @@ import CarruselDestacado from '../Carrusel/CarruselDestacado';
 import ListaProductosGenerica from './ListaProductosGenerica';
 import BannerDoble from '../PromoBanner/BannerDoble';
 
-function sumarDiasLaborables(fecha, dias) {
-  let resultado = new Date(fecha);
-  let sumados = 0;
-  while (sumados < dias) {
-    resultado.setDate(resultado.getDate() + 1);
-    if (resultado.getDay() !== 0 && resultado.getDay() !== 6) {
-      sumados++;
-    }
-  }
-  return resultado;
-}
-
-function obtenerTextoEntrega() {
-  const hoy = new Date();
-  const entrega = sumarDiasLaborables(hoy, 2);
-  return entrega.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-}
-
 function ListaProductos() {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [loadingAdd, setLoadingAdd] = useState({});
 
   useEffect(() => {
     setLoading(true);
@@ -63,38 +44,38 @@ function ListaProductos() {
       <Container maxWidth="xl" disableGutters>
         {loading && <Spinner animation="border" />}
         {error && <Alert variant="danger">{error}</Alert>}
-      <Row className="g-4">
-        <ListaProductosGenerica 
-          categoria="PYPC" 
-          subcategoria="Procesador" 
-          titulo="¡Procesadores que te podrían interesar!"
-          numProductos={6}
-          verMasRuta="/productos/PYPC/Procesador"
-        />
-      </Row>
-      <Row className="g-4">
-        <ListaProductosGenerica 
-          categoria="PYPC" 
-          subcategoria="Placa Base" 
-          titulo="¡Placas base que te podrían interesar!"
-          numProductos={6}
-          verMasRuta="/productos/PYPC/Placa%20Base"
-        />
-      </Row>
-      <Row className="g-4">
-        <ListaProductosGenerica 
-          categoria="PYPC" 
-          subcategoria="Tarjeta Gráfica" 
-          titulo="¡Tarjetas gráficas que te podrían interesar!"
-          numProductos={6}
-          verMasRuta="/productos/PYPC/Tarjeta%20Gráfica"
-        />
-      </Row>
-      {!loading && productos.length === 0 && (
-        <Alert variant="info" className="mt-4">No hay productos disponibles.</Alert>
-      )}
-      <BannerDoble />
-    </Container>
+        <Row className="g-4">
+          <ListaProductosGenerica
+            categoria="PYPC"
+            subcategoria="Procesador"
+            titulo="¡Procesadores que te podrían interesar!"
+            numProductos={6}
+            verMasRuta="/productos/PYPC/Procesador"
+          />
+        </Row>
+        <Row className="g-4">
+          <ListaProductosGenerica
+            categoria="PYPC"
+            subcategoria="Placa Base"
+            titulo="¡Placas base que te podrían interesar!"
+            numProductos={6}
+            verMasRuta="/productos/PYPC/Placa%20Base"
+          />
+        </Row>
+        <Row className="g-4">
+          <ListaProductosGenerica
+            categoria="PYPC"
+            subcategoria="Tarjeta Gráfica"
+            titulo="¡Tarjetas gráficas que te podrían interesar!"
+            numProductos={6}
+            verMasRuta="/productos/PYPC/Tarjeta%20Gráfica"
+          />
+        </Row>
+        {!loading && productos.length === 0 && (
+          <Alert variant="info" className="mt-4">No hay productos disponibles.</Alert>
+        )}
+        <BannerDoble />
+      </Container>
     </>
   );
 }

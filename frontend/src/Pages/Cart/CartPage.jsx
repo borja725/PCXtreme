@@ -43,7 +43,7 @@ export default function CartPage() {
       .then(res => res.json())
       .then(data => {
         setCart(data);
-         
+
       });
   };
 
@@ -55,7 +55,7 @@ export default function CartPage() {
       .then(res => res.json())
       .then(data => {
         setCart(data);
-         
+
       });
   };
 
@@ -68,12 +68,12 @@ export default function CartPage() {
       .then(res => res.json())
       .then(data => {
         setCart(data);
-         
+
       });
   };
 
   if (!token) return null;
-  if (loading) return <div className="w-100 d-flex justify-content-center align-items-center" style={{minHeight:300}}><Spinner animation="border" /></div>;
+  if (loading) return <div className="w-100 d-flex justify-content-center align-items-center" style={{ minHeight: 300 }}><Spinner animation="border" /></div>;
 
   return (
     <Container maxWidth="xl" disableGutters className="py-4">
@@ -83,7 +83,7 @@ export default function CartPage() {
             <h3 className="mb-3">Mi cesta</h3>
             {cart && cart.items && cart.items.length === 0 && (
               <div className="d-flex flex-column align-items-center justify-content-center py-5">
-                <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Carrito vacío" style={{width: 90, opacity: 0.5, marginBottom: 24}} />
+                <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Carrito vacío" style={{ width: 90, opacity: 0.5, marginBottom: 24 }} />
                 <h4 className="fw-bold mb-2">No hay productos en tu cesta</h4>
                 <div className="mb-3 text-muted">¡Échale un vistazo a nuestros productos!</div>
                 <Button variant="warning" size="lg" className="fw-bold px-4" onClick={() => navigate('/')}>
@@ -95,7 +95,7 @@ export default function CartPage() {
             {cart && cart.items && cart.items.map(item => (
               <Row key={item.product.id} className="align-items-center border-bottom py-3 g-0">
                 <Col xs={2} className="text-center">
-                  <img src={item.product.image} alt={item.product.name} style={{maxWidth: '75px', maxHeight: '75px', objectFit:'contain'}} />
+                  <img src={item.product.image} alt={item.product.name} style={{ maxWidth: '75px', maxHeight: '75px', objectFit: 'contain' }} />
                 </Col>
                 <Col xs={4}>
                   <div className="fw-bold">{item.product.name}</div>
@@ -104,9 +104,9 @@ export default function CartPage() {
                 </Col>
                 <Col xs={2} className="fw-bold">{item.product.price.toFixed(2)}€</Col>
                 <Col xs={2} className="d-flex align-items-center gap-2">
-                  <Button variant="outline-secondary" size="sm" onClick={() => handleQty(item.product.id, item.qty-1)} disabled={item.qty <= 1}>-</Button>
+                  <Button variant="outline-secondary" size="sm" onClick={() => handleQty(item.product.id, item.qty - 1)} disabled={item.qty <= 1}>-</Button>
                   <span className="mx-2">{item.qty}</span>
-                  <Button variant="outline-secondary" size="sm" onClick={() => handleQty(item.product.id, item.qty+1)} disabled={item.qty >= item.product.stock}>+</Button>
+                  <Button variant="outline-secondary" size="sm" onClick={() => handleQty(item.product.id, item.qty + 1)} disabled={item.qty >= item.product.stock}>+</Button>
                 </Col>
                 <Col xs={2} className="text-end">
                   <Button variant="outline-danger" size="sm" onClick={() => handleRemove(item.product.id)}>

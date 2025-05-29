@@ -4,7 +4,6 @@ import './PromoBanner.css';
 export default function BannerDoble() {
   return (
     <div className="row g-4 justify-content-center align-items-stretch my-4">
-      {/* AMD Banner */}
       <div className="col-12 col-md-6 d-flex">
         <button
           className="w-100 p-0 border-0 bg-transparent banner-card-btn"
@@ -22,7 +21,6 @@ export default function BannerDoble() {
           </div>
         </button>
       </div>
-      {/* NVIDIA Banner */}
       <div className="col-12 col-md-6 d-flex">
         <button
           className="w-100 p-0 border-0 bg-transparent banner-card-btn"

@@ -80,23 +80,23 @@ export default function ResenasProducto({ productId }) {
       <div className="mb-4">
         {resenas.map((r, i) => (
           <div key={i} className="d-flex align-items-start gap-3 pb-3 mb-3 border-bottom">
-            <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style={{width: 42, height: 42, fontSize: 20, fontWeight: 700}}>
+            <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style={{ width: 42, height: 42, fontSize: 20, fontWeight: 700 }}>
               {r.user?.charAt(0)?.toUpperCase() || '?'}
             </div>
-            <div style={{flex: 1}}>
+            <div style={{ flex: 1 }}>
               <div className="d-flex align-items-center gap-2 mb-1">
-                <span className="fw-semibold" style={{fontSize: 16}}>{r.user}</span>
-                <span className="text-warning" style={{fontSize: 18}}>{'★'.repeat(Math.round(r.rating))}</span>
-                <span className="text-muted" style={{fontSize: 13}}>{r.createdAt}</span>
+                <span className="fw-semibold" style={{ fontSize: 16 }}>{r.user}</span>
+                <span className="text-warning" style={{ fontSize: 18 }}>{'★'.repeat(Math.round(r.rating))}</span>
+                <span className="text-muted" style={{ fontSize: 13 }}>{r.createdAt}</span>
               </div>
-              <div style={{fontSize: 15}}>{r.comment}</div>
+              <div style={{ fontSize: 15 }}>{r.comment}</div>
             </div>
           </div>
         ))}
       </div>
       {isLoggedIn ? (
         <div>
-          <Button variant="primary" className="mb-3 fw-semibold" style={{fontSize: 18, borderRadius: 24, padding: '10px 28px'}} onClick={() => setShowModal(true)}>
+          <Button variant="primary" className="mb-3 fw-semibold" style={{ fontSize: 18, borderRadius: 24, padding: '10px 28px' }} onClick={() => setShowModal(true)}>
             <i className="bi bi-plus-circle me-2"></i>Publicar reseña
           </Button>
           <Modal show={showModal} onHide={() => setShowModal(false)} centered>
@@ -108,21 +108,21 @@ export default function ResenasProducto({ productId }) {
                 <Form.Group className="mb-3">
                   <Form.Label>Puntuación</Form.Label>
                   <Form.Select value={puntuacion} onChange={e => setPuntuacion(Number(e.target.value))} required>
-                    {[5,4,3,2,1].map(v => <option key={v} value={v}>{v}</option>)}
+                    {[5, 4, 3, 2, 1].map(v => <option key={v} value={v}>{v}</option>)}
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Comentario</Form.Label>
                   <Form.Control as="textarea" value={comentario} onChange={e => setComentario(e.target.value)} required minLength={3} maxLength={500} rows={4} placeholder="Escribe tu opinión sobre el producto..." />
                 </Form.Group>
-                <Button type="submit" disabled={enviando} variant="primary" className="w-100" style={{fontSize: 17}}>{enviando ? 'Enviando...' : 'Publicar reseña'}</Button>
+                <Button type="submit" disabled={enviando} variant="primary" className="w-100" style={{ fontSize: 17 }}>{enviando ? 'Enviando...' : 'Publicar reseña'}</Button>
               </Form>
               {alerta && <Alert variant={alerta.type} className="mt-3">{alerta.msg}</Alert>}
             </Modal.Body>
           </Modal>
         </div>
       ) : (
-        <div className="alert alert-info border-0" style={{fontSize: 16, background: '#f0f6ff'}}>Inicia sesión para poder publicar una reseña.</div>
+        <div className="alert alert-info border-0" style={{ fontSize: 16, background: '#f0f6ff' }}>Inicia sesión para poder publicar una reseña.</div>
       )}
     </div>
   );

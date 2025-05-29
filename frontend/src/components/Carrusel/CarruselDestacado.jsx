@@ -24,12 +24,12 @@ const slides = [
     linkText: 'Ver reto',
   },
   {
-    tipo: 'configurador',
-    color: '#00897b',
-    title: 'Configurador Express',
-    desc: '¿No sabes qué componentes elegir? Usa nuestro configurador inteligente y crea tu PC ideal en 1 minuto.',
-    link: '/configurador',
-    linkText: 'Probar ahora',
+    tipo: 'comparador',
+    color: '#1976d2',
+    title: 'Compara Productos',
+    desc: '¿Dudas entre varios componentes? Usa nuestro comparador y elige la mejor opción para ti.',
+    link: '/productos/PYPC',
+    linkText: 'Comparar ahora',
   },
 ];
 

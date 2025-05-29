@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../../public/logo.png";
-import { FaMicrochip, FaMemory, FaHdd, FaPowerOff, FaSnowflake, FaKeyboard, FaCube, FaThLarge, FaLayerGroup, FaProjectDiagram } from "react-icons/fa";
+import { FaMicrochip, FaMemory, FaHdd, FaPowerOff, FaSnowflake, FaCube, FaThLarge, FaLayerGroup, FaProjectDiagram } from "react-icons/fa";
 import Slide from '@mui/material/Slide';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,13 +49,13 @@ function SidebarMenu({ show, onClose }) {
           }}
           onClick={e => e.stopPropagation()}
         >
-          <div className="d-flex align-items-center justify-content-between border-bottom px-4 py-3" style={{minHeight:85}}>
-            <img src={logo} alt="Logo" style={{height:34, scale: 5, objectFit:'contain', marginLeft:67, marginRight:'auto'}} />
-            <button type="button" className="btn btn-light rounded-circle d-flex align-items-center justify-content-center ms-2" style={{fontSize: '1.6rem', width:38, height:38}} onClick={onClose} aria-label="Cerrar menú">
+          <div className="d-flex align-items-center justify-content-between border-bottom px-4 py-3" style={{ minHeight: 85 }}>
+            <img src={logo} alt="Logo" style={{ height: 34, scale: 5, objectFit: 'contain', marginLeft: 67, marginRight: 'auto' }} />
+            <button type="button" className="btn btn-light rounded-circle d-flex align-items-center justify-content-center ms-2" style={{ fontSize: '1.6rem', width: 38, height: 38 }} onClick={onClose} aria-label="Cerrar menú">
               ×
             </button>
           </div>
-          <div className="d-flex flex-column gap-3 px-3 py-3" style={{rowGap: '1.1rem'}}>
+          <div className="d-flex flex-column gap-3 px-3 py-3" style={{ rowGap: '1.1rem' }}>
             {menuItems.map((item, idx) => {
               const path = item.subcategoria
                 ? `/productos/${item.categoria}/${encodeURIComponent(item.subcategoria)}`
@@ -82,7 +82,7 @@ function SidebarMenu({ show, onClose }) {
                     onClose();
                   }}
                 >
-                  <span style={{fontSize:'1.3rem', opacity:0.92, display:'flex',alignItems:'center'}}>{item.icon}</span>
+                  <span style={{ fontSize: '1.3rem', opacity: 0.92, display: 'flex', alignItems: 'center' }}>{item.icon}</span>
                   <span className="flex-grow-1 text-start">{item.label}</span>
                 </button>
               );

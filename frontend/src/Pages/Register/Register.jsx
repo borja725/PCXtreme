@@ -53,25 +53,25 @@ export default function Register() {
   };
 
   return (
-    <Container fluid className="min-vh-100 p-0" style={{background: '#f3f3f3'}}>
+    <Container fluid className="min-vh-100 p-0" style={{ background: '#f3f3f3' }}>
       <Row className="g-0 min-vh-100">
-        <Col md={5} className="d-none d-md-flex flex-column align-items-center justify-content-center" style={{background: 'linear-gradient(135deg, #1976d2 0%, rgb(0,0,0) 100%)', color: '#fff', minHeight: '100vh', padding: '48px 0'}}>
+        <Col md={5} className="d-none d-md-flex flex-column align-items-center justify-content-center" style={{ background: 'linear-gradient(135deg, #1976d2 0%, rgb(0,0,0) 100%)', color: '#fff', minHeight: '100vh', padding: '48px 0' }}>
           <button
             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
             onClick={() => navigate('/')}
           >
             <img src={logoUrl} alt="PC Xtreme" style={{ width: 60, marginBottom: 60, scale: 8, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.10))' }} />
           </button>
-          <h2 className="fw-bold mb-3" style={{letterSpacing: 1}}>¡Crea tu cuenta gratis!</h2>
-          <ul className="list-unstyled" style={{fontSize: 22, lineHeight: 2}}>
+          <h2 className="fw-bold mb-3" style={{ letterSpacing: 1 }}>¡Crea tu cuenta gratis!</h2>
+          <ul className="list-unstyled" style={{ fontSize: 22, lineHeight: 2 }}>
             <li>✔ Accede a ofertas exclusivas y personalizadas.</li>
             <li>✔ Consulta tu historial de compras.</li>
             <li>✔ Accede a compra de productos.</li>
             <li>✔ Guarda tus configuraciones y listas.</li>
           </ul>
         </Col>
-        <Col xs={12} md={7} className="d-flex align-items-center justify-content-center" style={{minHeight: '100vh', background: '#fff'}}>
-          <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{maxWidth: 400, borderRadius: 16}}>
+        <Col xs={12} md={7} className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: '#fff' }}>
+          <Card className={`shadow p-4 w-100 ${styles.loginCardAnim}`} style={{ maxWidth: 400, borderRadius: 16 }}>
             <h4 className="mb-3 text-primary fw-bold">Crear cuenta</h4>
             {error && <Alert variant="danger">{error}</Alert>}
             {success && <Alert variant="success">{success}</Alert>}
@@ -97,73 +97,73 @@ export default function Register() {
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="registerPassword">
-  <Form.Label>Contraseña</Form.Label>
-  <div style={{ position: 'relative' }}>
-    <Form.Control
-      type={showPassword ? 'text' : 'password'}
-      value={password}
-      onChange={e => setPassword(e.target.value)}
-      required
-      placeholder="Introduce tu contraseña"
-    />
-    <span
-      onClick={() => setShowPassword(s => !s)}
-      style={{
-        position: 'absolute',
-        right: 12,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontSize: 22,
-        userSelect: 'none',
-        zIndex: 2
-      }}
-      aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-    >
-      {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-    </span>
-  </div>
-  {password && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(password) && (
-    <div style={{ color: '#d32f2f', fontSize: 13, marginTop: 4 }}>
-      La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.
-    </div>
-  )}
-</Form.Group>
-<Form.Group className="mb-3" controlId="registerConfirmPassword">
-  <Form.Label>Confirmar contraseña</Form.Label>
-  <div style={{ position: 'relative' }}>
-    <Form.Control
-      type={showConfirmPassword ? 'text' : 'password'}
-      value={confirmPassword}
-      onChange={e => setConfirmPassword(e.target.value)}
-      required
-      placeholder="Confirmar contraseña"
-    />
-    <span
-      onClick={() => setShowConfirmPassword(s => !s)}
-      style={{
-        position: 'absolute',
-        right: 12,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        cursor: 'pointer',
-        color: '#1976d2',
-        fontSize: 22,
-        userSelect: 'none',
-        zIndex: 2
-      }}
-      aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-    >
-      {showConfirmPassword ? <MdVisibilityOff /> : <MdVisibility />}
-    </span>
-  </div>
-  {confirmPassword && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(confirmPassword) && (
-    <div style={{ color: '#d32f2f', fontSize: 13, marginTop: 4 }}>
-      La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.
-    </div>
-  )}
-</Form.Group>
+                <Form.Label>Contraseña</Form.Label>
+                <div style={{ position: 'relative' }}>
+                  <Form.Control
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    placeholder="Introduce tu contraseña"
+                  />
+                  <span
+                    onClick={() => setShowPassword(s => !s)}
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      cursor: 'pointer',
+                      color: '#1976d2',
+                      fontSize: 22,
+                      userSelect: 'none',
+                      zIndex: 2
+                    }}
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  >
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </span>
+                </div>
+                {password && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(password) && (
+                  <div style={{ color: '#d32f2f', fontSize: 13, marginTop: 4 }}>
+                    La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.
+                  </div>
+                )}
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="registerConfirmPassword">
+                <Form.Label>Confirmar contraseña</Form.Label>
+                <div style={{ position: 'relative' }}>
+                  <Form.Control
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    required
+                    placeholder="Confirmar contraseña"
+                  />
+                  <span
+                    onClick={() => setShowConfirmPassword(s => !s)}
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      cursor: 'pointer',
+                      color: '#1976d2',
+                      fontSize: 22,
+                      userSelect: 'none',
+                      zIndex: 2
+                    }}
+                    aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                  >
+                    {showConfirmPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </span>
+                </div>
+                {confirmPassword && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(confirmPassword) && (
+                  <div style={{ color: '#d32f2f', fontSize: 13, marginTop: 4 }}>
+                    La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.
+                  </div>
+                )}
+              </Form.Group>
               <Button type="submit" variant="primary" className="w-100 fw-bold mb-2" disabled={loading}>
                 {loading ? "Cargando..." : "Registrarse"}
               </Button>
