@@ -81,6 +81,7 @@ class UserController extends AbstractController
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),
             'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
             'exp' => (new \DateTime('+7 days'))->getTimestamp(),
         ];
         $jwt = \Firebase\JWT\JWT::encode($payload, $_ENV['JWT_SECRET'], 'HS256');
@@ -202,6 +203,7 @@ class UserController extends AbstractController
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),
             'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
             'exp' => time() + 3600
         ], $_ENV['JWT_SECRET'], 'HS256');
         return new JsonResponse(['token' => $jwt]);

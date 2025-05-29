@@ -12,6 +12,7 @@ import ChangePassword from '../Pages/Password/ChangePassword';
 import CartPage from '../Pages/Cart/CartPage';
 import ProductosPorTipo from '../Pages/ProductoTipo/ProductosPorTipo';
 import ProductoDetalle from '../Pages/ProductoDetail/ProductoDetalle';
+import AdminPage from '../Pages/Admin/AdminPage';
 import FooterPCXtreme from '../components/Footers/FooterPCXtreme';
 import FooterMinimal from '../components/Footers/FooterMinimal';
 
@@ -39,6 +40,7 @@ function AppContent() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/productos/:categoria/:subcategoria?" element={<ProductosPorTipo />} />
         <Route path="/producto/:id" element={<ProductoDetalle />} />
+        <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </div>
       {!hideFooter && <FooterMinimal />}

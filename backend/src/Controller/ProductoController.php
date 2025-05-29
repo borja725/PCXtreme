@@ -40,6 +40,7 @@ class ProductoController extends AbstractController
                 'precio' => $producto->getPrecio(),
                 'precioAnterior' => null,
                 'stock' => $producto->getStock(),
+                'descripcion' => $producto->getDescripcion(), // <-- Añade esta línea
                 'imatgeurl' => $producto->getImatgeurl(),
                 'categoria' => $producto->getCategoria(),
                 'subcategoria' => $producto->getSubcategoria(),
@@ -56,6 +57,20 @@ class ProductoController extends AbstractController
     #[Route('', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em, SerializerInterface $serializer): JsonResponse
     {
+        // Comprobar token y rol admin
+        $authHeader = $request->headers->get('Authorization');
+        if (!$authHeader || !preg_match('/Bearer\s(.*)/', $authHeader, $matches)) {
+            return new JsonResponse(['error' => 'Token no proporcionado'], 401);
+        }
+        $jwt = $matches[1];
+        try {
+            $decoded = \Firebase\JWT\JWT::decode($jwt, new \Firebase\JWT\Key($_ENV['JWT_SECRET'], 'HS256'));
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Token inválido'], 401);
+        }
+        if (!in_array('ROLE_ADMIN', $decoded->roles ?? [])) {
+            return new JsonResponse(['error' => 'Solo admin puede crear productos'], 403);
+        }
         $data = json_decode($request->getContent(), true);
         $producto = new Producto();
         $producto->setNombre($data['nombre']);
@@ -86,10 +101,56 @@ class ProductoController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
-    public function delete(Producto $producto, EntityManagerInterface $em): JsonResponse
+    public function delete(Producto $producto, Request $request, EntityManagerInterface $em): JsonResponse
     {
+        // Comprobar token y rol admin
+        $authHeader = $request->headers->get('Authorization');
+        if (!$authHeader || !preg_match('/Bearer\s(.*)/', $authHeader, $matches)) {
+            return new JsonResponse(['error' => 'Token no proporcionado'], 401);
+        }
+        $jwt = $matches[1];
+        try {
+            $decoded = \Firebase\JWT\JWT::decode($jwt, new \Firebase\JWT\Key($_ENV['JWT_SECRET'], 'HS256'));
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Token inválido'], 401);
+        }
+        if (!in_array('ROLE_ADMIN', $decoded->roles ?? [])) {
+            return new JsonResponse(['error' => 'Solo admin puede eliminar productos'], 403);
+        }
         $em->remove($producto);
         $em->flush();
         return $this->json(['mensaje' => 'Producto eliminado']);
+    }
+
+    #[Route('/{id}', methods: ['PUT'])]
+    public function update(Producto $producto, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        // Comprobar token y rol admin
+        $authHeader = $request->headers->get('Authorization');
+        if (!$authHeader || !preg_match('/Bearer\s(.*)/', $authHeader, $matches)) {
+            return new JsonResponse(['error' => 'Token no proporcionado'], 401);
+        }
+        $jwt = $matches[1];
+        try {
+            $decoded = \Firebase\JWT\JWT::decode($jwt, new \Firebase\JWT\Key($_ENV['JWT_SECRET'], 'HS256'));
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Token inválido'], 401);
+        }
+        if (!in_array('ROLE_ADMIN', $decoded->roles ?? [])) {
+            return new JsonResponse(['error' => 'Solo admin puede editar productos'], 403);
+        }
+        $data = json_decode($request->getContent(), true);
+        if (isset($data['nombre'])) $producto->setNombre($data['nombre']);
+        if (isset($data['precio'])) $producto->setPrecio($data['precio']);
+        if (isset($data['stock'])) $producto->setStock($data['stock']);
+        if (isset($data['descripcion'])) $producto->setDescripcion($data['descripcion']);
+        if (isset($data['imatgeurl'])) $producto->setImatgeurl($data['imatgeurl']);
+        if (isset($data['categoria'])) $producto->setCategoria($data['categoria']);
+        if (isset($data['subcategoria'])) $producto->setSubcategoria($data['subcategoria']);
+        if (isset($data['marca'])) $producto->setMarca($data['marca']);
+        if (isset($data['modelo'])) $producto->setModelo($data['modelo']);
+        $em->persist($producto);
+        $em->flush();
+        return $this->json(['mensaje' => 'Producto actualizado']);
     }
 }

@@ -43,7 +43,6 @@ export default function CartPage() {
       .then(res => res.json())
       .then(data => {
         setCart(data);
-
       });
   };
 

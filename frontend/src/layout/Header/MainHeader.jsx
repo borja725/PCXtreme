@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import Button from '@mui/material/Button';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -14,12 +15,13 @@ import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
-import { getUserName, getToken } from '../../utils/auth';
+import { getUserName, getToken, decodeToken } from '../../utils/auth';
 
 const logoUrl = "../../public/logo.png";
 import SidebarMenu from '../../components/SidebarMenu/SidebarMenu';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from 'react-router-dom';
+import styles from './MainHeader.module.css';
 
 function MainHeader() {
   const { cartCount } = useCart();
@@ -35,6 +37,12 @@ function MainHeader() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userName, setUserName] = useState(getUserName());
   const isLoggedIn = !!getToken();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const payload = decodeToken();
+    setIsAdmin(!!(payload && payload.roles && payload.roles.includes('ROLE_ADMIN')));
+  }, [userName]);
 
   useEffect(() => {
     const onStorage = () => setUserName(getUserName());
@@ -89,6 +97,17 @@ function MainHeader() {
                 <img style={{ width: 10, height: 10, scale: 20 }} src={logoUrl} alt="PC Xtreme" />
               </button>
             </Box>
+            {isAdmin && (
+              <Button
+              variant="outlined"
+              size="small"
+              className={`me-3 fw-bold ${styles.headerButton}`}
+              style={{ fontSize: '12px' }}
+              onClick={() => navigate('/admin')}
+            >
+              Panel de administración
+            </Button>
+            )}
             <Paper
               component="form"
               sx={{
@@ -147,22 +166,15 @@ function MainHeader() {
                 <AccountCircleIcon />
               </IconButton>
               {isLoggedIn && (
-                <button
-                  onClick={() => navigate('/profile')}
-                  style={{
-                    background: '#1976d2',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: 6,
-                    padding: '6px 20px',
-                    fontWeight: 600,
-                    fontSize: 16,
-                    cursor: 'pointer',
-                    marginLeft: 8
-                  }}
-                >
-                  Cuenta
-                </button>
+                <Button
+                variant="outlined"
+                size="small"
+                className={`me-2 fw-bold ${styles.headerButton}`}
+                style={{ fontSize: '12px', width: '90px' }}
+                onClick={() => navigate('/profile')}
+              >
+                Cuenta
+              </Button>
               )}
               <IconButton
                 size="large"
