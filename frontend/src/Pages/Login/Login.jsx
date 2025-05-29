@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 import styles from './loginCard.module.css';
 import { useNavigate } from 'react-router-dom';
-const logoUrl = "../../public/logo.png";
+const logoUrl = "/logo.png";
 import { setToken } from '../../utils/auth';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 

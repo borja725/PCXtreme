@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../../../public/logo.png";
+import logo from "/logo.png";
 import { FaMicrochip, FaMemory, FaHdd, FaPowerOff, FaSnowflake, FaCube, FaThLarge, FaLayerGroup, FaProjectDiagram } from "react-icons/fa";
 import Slide from '@mui/material/Slide';
 import { useNavigate } from 'react-router-dom';

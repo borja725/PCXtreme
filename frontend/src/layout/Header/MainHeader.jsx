@@ -17,7 +17,7 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import { getUserName, getToken, decodeToken } from '../../utils/auth';
 
-const logoUrl = "../../public/logo.png";
+const logoUrl = "/logo.png";
 import SidebarMenu from '../../components/SidebarMenu/SidebarMenu';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from 'react-router-dom';

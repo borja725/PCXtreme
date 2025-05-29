@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import styles from '../Login/loginCard.module.css';
 import { useNavigate } from 'react-router-dom';
-const logoUrl = "../../public/logo.png";
+const logoUrl = "/logo.png";
 
 export default function Register() {
   const navigate = useNavigate();
