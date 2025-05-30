@@ -6,8 +6,8 @@ RUN apt-get update \
     && apt-get install -y git unzip libicu-dev libpq-dev libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev \
     && docker-php-ext-install intl pdo pdo_pgsql opcache zip gd
 
-# Instala Composer
-COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+# Instala Composer manualmente
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copia el código fuente
 WORKDIR /app
