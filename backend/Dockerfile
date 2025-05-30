@@ -16,9 +16,8 @@ COPY . .
 # Permite plugins de Composer como root (por compatibilidad)
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Instala dependencias de Composer (sin dev, optimizado) como www-data
-RUN chown -R www-data:www-data /app \
-    && su www-data -s /bin/sh -c "composer install --no-dev --optimize-autoloader --no-interaction"
+# Instala dependencias de Composer (sin dev, optimizado) como root
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Crea el directorio de cache y logs
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var
