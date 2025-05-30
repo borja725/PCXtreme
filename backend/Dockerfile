@@ -17,7 +17,7 @@ COPY . .
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Instala dependencias de Composer (sin dev, optimizado) como root
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install -vvv
 
 # Crea el directorio de cache y logs
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var
