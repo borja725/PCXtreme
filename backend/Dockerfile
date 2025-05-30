@@ -22,11 +22,10 @@ RUN composer install -vvv
 # Crea el directorio de cache y logs
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var
 
-# Instala Caddy (servidor web recomendado por Fly.io para PHP)
-RUN apt-get install -y debian-keyring debian-archive-keyring apt-transport-https \
-    && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | apt-key add - \
-    && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list \
-    && apt-get update && apt-get install caddy
+# Instala Caddy descargando el binario oficial
+RUN apt-get install -y curl \
+    && curl -1sLf 'https://caddyserver.com/api/download?os=linux&arch=amd64' -o /usr/bin/caddy \
+    && chmod +x /usr/bin/caddy
 
 # Copia configuración de Caddy
 COPY Caddyfile /etc/caddy/Caddyfile
