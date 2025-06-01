@@ -114,7 +114,7 @@ export default function ProductosPorTipo() {
   const subcat = subcategoria && subcategoria.trim() !== "" ? subcategoria : undefined;
 
   useEffect(() => {
-    const url = `/api/productos?categoria=${encodeURIComponent(categoria)}${subcat ? `&subcategoria=${encodeURIComponent(subcat)}` : ''}`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}/api/productos?categoria=${encodeURIComponent(categoria)}${subcat ? `&subcategoria=${encodeURIComponent(subcat)}` : ''}`;
     setLoading(true);
     setError(null);
     fetch(url)
@@ -310,7 +310,7 @@ export default function ProductosPorTipo() {
                               if (token) {
                                 headers['Authorization'] = `Bearer ${token}`;
                               }
-                              const res = await fetch(`https://pcxtreme.fly.dev/api/cart/add`, {
+                              const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/cart/add`, {
                                 method: 'POST',
                                 headers,
                                 credentials: 'include',

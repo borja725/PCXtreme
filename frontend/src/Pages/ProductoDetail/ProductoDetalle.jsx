@@ -16,7 +16,7 @@ export default function ProductoDetalle() {
 
     useEffect(() => {
       setLoading(true);
-      fetch('/api/productos')
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/productos`)
         .then(res => {
           if (!res.ok) throw new Error('No se pudo cargar el catálogo');
           return res.json();

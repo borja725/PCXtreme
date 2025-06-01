@@ -18,7 +18,7 @@ export function CartProvider({ children }) {
       setCartCount(0);
       return;
     }
-    fetch('https://pcxtreme.fly.dev/api/cart', {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/cart`, {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include'
     })

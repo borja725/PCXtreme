@@ -18,7 +18,7 @@ export default function Profile() {
       setError('');
       try {
         const token = getToken();
-        const response = await fetch('https://pcxtreme.fly.dev/api/profile', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -46,7 +46,7 @@ export default function Profile() {
       formData.append('name', name);
       formData.append('email', email);
       if (profileImage) formData.append('profileImage', profileImage);
-      const response = await fetch('https://pcxtreme.fly.dev/api/profile', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
@@ -69,7 +69,7 @@ export default function Profile() {
     setError('');
     try {
       const token = getToken();
-      const response = await fetch('https://pcxtreme.fly.dev/api/profile', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`
@@ -98,7 +98,7 @@ export default function Profile() {
     setError('');
     try {
       const token = getToken();
-      const response = await fetch('https://pcxtreme.fly.dev/api/profile', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`

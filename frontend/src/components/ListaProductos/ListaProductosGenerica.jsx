@@ -240,7 +240,7 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
                         if (token) {
                           headers['Authorization'] = `Bearer ${token}`;
                         }
-                        const res = await fetch(`https://pcxtreme.fly.dev/api/cart/add`, {
+                        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/cart/add`, {
                           method: 'POST',
                           headers,
                           credentials: 'include',

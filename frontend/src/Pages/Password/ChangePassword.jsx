@@ -31,7 +31,7 @@ export default function ChangePassword() {
     setSuccess('');
     try {
       const token = getToken();
-      const response = await fetch('https://pcxtreme.fly.dev/api/change-password', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

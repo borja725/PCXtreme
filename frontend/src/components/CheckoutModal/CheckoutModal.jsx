@@ -115,7 +115,7 @@ export default function CheckoutModal({ show, onHide, onOrderCompleted }) {
   const handleClose = async () => {
     try {
       const token = localStorage.getItem('jwt');
-      await fetch('https://pcxtreme.fly.dev/api/cart/clear', {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/cart/clear`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
