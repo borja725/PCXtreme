@@ -310,7 +310,7 @@ export default function ProductosPorTipo() {
                               if (token) {
                                 headers['Authorization'] = `Bearer ${token}`;
                               }
-                              const res = await fetch(`http://localhost:8000/api/cart/add`, {
+                              const res = await fetch(`https://pcxtreme.fly.dev/api/cart/add`, {
                                 method: 'POST',
                                 headers,
                                 credentials: 'include',

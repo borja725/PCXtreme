@@ -19,7 +19,7 @@ export default function CartPage() {
       navigate('/login');
       return;
     }
-    fetch('http://localhost:8000/api/cart', {
+    fetch('https://pcxtreme.fly.dev/api/cart', {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include'
     })
@@ -35,7 +35,7 @@ export default function CartPage() {
   }, [token, navigate]);
 
   const handleRemove = productId => {
-    fetch('http://localhost:8000/api/cart/remove', {
+    fetch('https://pcxtreme.fly.dev/api/cart/remove', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ productId })
@@ -47,7 +47,7 @@ export default function CartPage() {
   };
 
   const handleClear = () => {
-    fetch('http://localhost:8000/api/cart/clear', {
+    fetch('https://pcxtreme.fly.dev/api/cart/clear', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -59,7 +59,7 @@ export default function CartPage() {
   };
 
   const handleQty = (productId, qty) => {
-    fetch('http://localhost:8000/api/cart/add', {
+    fetch('https://pcxtreme.fly.dev/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ productId, qty })
