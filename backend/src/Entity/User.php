@@ -29,6 +29,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,13 +73,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
-
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // Garantiza que siempre tenga al menos ROLE_USER
         if (!in_array('ROLE_USER', $roles)) {
             $roles[] = 'ROLE_USER';
         }
