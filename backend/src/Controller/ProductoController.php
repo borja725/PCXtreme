@@ -40,7 +40,7 @@ class ProductoController extends AbstractController
                 'precio' => $producto->getPrecio(),
                 'precioAnterior' => null,
                 'stock' => $producto->getStock(),
-                'descripcion' => $producto->getDescripcion(), // <-- Añade esta línea
+                'descripcion' => $producto->getDescripcion(),
                 'imatgeurl' => $producto->getImatgeurl(),
                 'categoria' => $producto->getCategoria(),
                 'subcategoria' => $producto->getSubcategoria(),
