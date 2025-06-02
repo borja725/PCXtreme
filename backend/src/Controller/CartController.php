@@ -156,7 +156,7 @@ class CartController extends AbstractController
                         'image' => $prod->getImatgeurl(),
                         'stock' => $prod->getStock(),
                         'category' => $prod->getCategoria(),
-'subcategory' => $prod->getSubcategoria(),
+                        'subcategory' => $prod->getSubcategoria(),
                     ],
                     'qty' => $qty,
                     'total' => $itemTotal

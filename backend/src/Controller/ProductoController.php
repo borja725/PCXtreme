@@ -57,7 +57,6 @@ class ProductoController extends AbstractController
     #[Route('', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em, SerializerInterface $serializer): JsonResponse
     {
-        // Comprobar token y rol admin
         $authHeader = $request->headers->get('Authorization');
         if (!$authHeader || !preg_match('/Bearer\s(.*)/', $authHeader, $matches)) {
             return new JsonResponse(['error' => 'Token no proporcionado'], 401);
@@ -103,7 +102,6 @@ class ProductoController extends AbstractController
     #[Route('/{id}', methods: ['DELETE'])]
     public function delete(Producto $producto, Request $request, EntityManagerInterface $em): JsonResponse
     {
-        // Comprobar token y rol admin
         $authHeader = $request->headers->get('Authorization');
         if (!$authHeader || !preg_match('/Bearer\s(.*)/', $authHeader, $matches)) {
             return new JsonResponse(['error' => 'Token no proporcionado'], 401);
@@ -125,7 +123,7 @@ class ProductoController extends AbstractController
     #[Route('/{id}', methods: ['PUT'])]
     public function update(Producto $producto, Request $request, EntityManagerInterface $em): JsonResponse
     {
-        // Comprobar token y rol admin
+        
         $authHeader = $request->headers->get('Authorization');
         if (!$authHeader || !preg_match('/Bearer\s(.*)/', $authHeader, $matches)) {
             return new JsonResponse(['error' => 'Token no proporcionado'], 401);

@@ -137,11 +137,9 @@ class UserController extends AbstractController
         if (!$currentPassword || !$newPassword) {
             return new JsonResponse(['error' => 'Faltan campos obligatorios'], 400);
         }
-        // Seguridad: mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo
         if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};\':\\|,.<>\/\?]).{8,}$/', $newPassword)) {
             return new JsonResponse(['error' => 'La nueva contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.'], 400);
         }
-        // Si se envía confirmNewPassword, validar que coincida
         if ($confirmNewPassword !== null && $newPassword !== $confirmNewPassword) {
             return new JsonResponse(['error' => 'Las contraseñas nuevas no coinciden'], 400);
         }
@@ -172,7 +170,6 @@ class UserController extends AbstractController
         if ($userRepo->findOneByEmail($email) || $userRepo->findOneByUsername($username)) {
             return new JsonResponse(['error' => 'Usuario o email ya existen'], 409);
         }
-        // Seguridad: mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo
         if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};\':\\|,.<>\/\?]).{8,}$/', $password)) {
             return new JsonResponse(['error' => 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.'], 400);
         }
