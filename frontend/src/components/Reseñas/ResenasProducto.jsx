@@ -19,7 +19,7 @@ export default function ResenasProducto({ productId }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/productos/${productId}/reviews`)
+    fetch(`${import.meta.env.VITE_URL_API}/api/productos/${productId}/reviews`)
       .then(res => res.json())
       .then(data => {
         setResenas(Array.isArray(data) ? data : []);
@@ -36,7 +36,7 @@ export default function ResenasProducto({ productId }) {
     setEnviando(true);
     setAlerta(null);
     try {
-      const res = await fetch(`/api/productos/${productId}/reviews`, {
+      const res = await fetch(`${import.meta.env.VITE_URL_API}/api/productos/${productId}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ export function CartProvider({ children }) {
       setCartCount(0);
       return;
     }
-    fetch('http://localhost:8000/api/cart', {
+    fetch(`${import.meta.env.VITE_URL_API}/api/cart`, {
       headers: { Authorization: `Bearer ${token}` },
       credentials: 'include'
     })

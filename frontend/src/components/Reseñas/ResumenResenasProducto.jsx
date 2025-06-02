@@ -6,7 +6,7 @@ export default function ResumenResenasProducto({ productId }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/productos/${productId}/reviews`)
+    fetch(`${import.meta.env.VITE_URL_API}/api/productos/${productId}/reviews`)
       .then(res => res.json())
       .then(data => {
         setResenas(Array.isArray(data) ? data : []);

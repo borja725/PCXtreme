@@ -13,7 +13,7 @@ function ListaProductos() {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch('/api/productos?categoria=PYPC&subcategoria=Procesador')
+    fetch(`${import.meta.env.VITE_URL_API}/api/productos?categoria=PYPC&subcategoria=Procesador`)
       .then(res => {
         if (!res.ok) throw new Error('Error al obtener productos');
         return res.json();

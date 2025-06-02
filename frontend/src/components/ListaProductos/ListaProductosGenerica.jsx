@@ -75,9 +75,9 @@ export default function ListaProductosGenerica({ categoria = 'PYPC', subcategori
   useEffect(() => {
     setLoading(true);
     setError(null);
-    let url = `/api/productos?categoria=${encodeURIComponent(categoria)}`;
+    let url = `${import.meta.env.VITE_URL_API}/api/productos?categoria=${encodeURIComponent(categoria)}`;
     if (subcategoria) {
-      url += `&subcategoria=${encodeURIComponent(subcategoria)}`;
+      url += `${import.meta.env.VITE_URL_API}&subcategoria=${encodeURIComponent(subcategoria)}`;
     }
     fetch(url)
       .then(res => {

@@ -31,7 +31,7 @@ export default function ChangePassword() {
     setSuccess('');
     try {
       const token = getToken();
-      const response = await fetch('http://localhost:8000/api/change-password', {
+      const response = await fetch(`${import.meta.env.VITE_URL_API}/api/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

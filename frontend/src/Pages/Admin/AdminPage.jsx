@@ -30,7 +30,7 @@ export default function AdminPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/productos');
+      const res = await fetch(`${import.meta.env.VITE_URL_API}/api/productos`);
       if (!res.ok) throw new Error('Error al obtener productos');
       const data = await res.json();
       setProductos(data);
@@ -62,7 +62,7 @@ export default function AdminPage() {
     setSaving(true);
     setError('');
     try {
-      const res = await fetch(`/api/productos/${productToDelete.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_URL_API}/api/productos/${productToDelete.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${getToken()}` }
       });
@@ -90,7 +90,7 @@ export default function AdminPage() {
     setError('');
     try {
       const method = modalMode === 'edit' ? 'PUT' : 'POST';
-      const url = modalMode === 'edit' ? `/api/productos/${selectedProduct.id}` : '/api/productos';
+      const url = modalMode === 'edit' ? `${import.meta.env.VITE_URL_API}/api/productos/${selectedProduct.id}` : `${import.meta.env.VITE_URL_API}/api/productos`;
       const res = await fetch(url, {
         method,
         headers: {

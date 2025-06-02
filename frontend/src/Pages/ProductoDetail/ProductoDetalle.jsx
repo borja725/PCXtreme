@@ -16,7 +16,7 @@ export default function ProductoDetalle() {
 
     useEffect(() => {
       setLoading(true);
-      fetch('/api/productos')
+      fetch(`${import.meta.env.VITE_URL_API}/api/productos`)
         .then(res => {
           if (!res.ok) throw new Error('No se pudo cargar el catálogo');
           return res.json();
@@ -81,7 +81,7 @@ export default function ProductoDetalle() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/productos/${id}`)
+    fetch(`${import.meta.env.VITE_URL_API}/api/productos/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('No se pudo cargar el producto');
         return res.json();
@@ -211,7 +211,7 @@ export default function ProductoDetalle() {
                         setLoadingAdd(true);
                         setAlertAdd(null);
                         try {
-                          const res = await fetch('/api/cart/add', {
+                          const res = await fetch(`${import.meta.env.VITE_URL_API}/api/cart/add`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ productId: producto.id, qty: 1 })
