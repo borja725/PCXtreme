@@ -10,10 +10,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\SupabaseClient;
 
 #[Route('/api/productos')]
 class ProductoController extends AbstractController
 {
+    private $supabase;
+
+    public function __construct(SupabaseClient $supabase)
+    {
+        $this->supabase = $supabase;
+    }
     #[Route('', methods: ['GET'])]
     public function index(Request $request, ProductoRepository $repo, SerializerInterface $serializer): JsonResponse
     {

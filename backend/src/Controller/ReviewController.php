@@ -13,8 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use App\Service\SupabaseClient;
+
 class ReviewController extends AbstractController
 {
+    private $supabase;
+
+    public function __construct(SupabaseClient $supabase)
+    {
+        $this->supabase = $supabase;
+    }
     #[Route('/api/productos/{id}/reviews', name: 'get_product_reviews', methods: ['GET'])]
     public function getReviews($id, ReviewRepository $reviewRepository, ProductoRepository $productoRepository): Response
     {

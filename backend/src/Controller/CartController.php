@@ -7,8 +7,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Service\SupabaseClient;
+
 class CartController extends AbstractController
 {
+    private $supabase;
+
+    public function __construct(SupabaseClient $supabase)
+    {
+        $this->supabase = $supabase;
+    }
     #[Route('/api/cart/add', name: 'api_cart_add', methods: ['POST'])]
     public function addToCart(Request $request, \Doctrine\ORM\EntityManagerInterface $em, \App\Repository\ProductoRepository $productoRepo): JsonResponse
     {

@@ -11,10 +11,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Firebase\JWT\JWT;
+use App\Service\SupabaseClient;
 
 #[Route('/api')]
 class UserController extends AbstractController
 {
+    private $supabase;
+
+    public function __construct(SupabaseClient $supabase)
+    {
+        $this->supabase = $supabase;
+    }
     #[Route("/profile", methods: ["DELETE"])]
     public function deleteProfile(Request $request, UserRepository $userRepo, EntityManagerInterface $em)
     {
