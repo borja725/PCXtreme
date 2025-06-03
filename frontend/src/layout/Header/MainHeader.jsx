@@ -59,7 +59,7 @@ function MainHeader() {
   useEffect(() => {
     if (searchOpen && search && search.trim()) {
       setSearchLoading(true);
-      fetch(`/api/productos?q=${encodeURIComponent(search)}`)
+      fetch(`${process.env.REACT_APP_API_URL}/api/productos?q=${encodeURIComponent(search)}`)
         .then(res => res.json())
         .then(data => {
           setSearchResults(data);
