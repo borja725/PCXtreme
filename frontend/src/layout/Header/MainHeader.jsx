@@ -250,7 +250,7 @@ function DropdownSearchPanel({ search, navigate, anchorRef }) {
   React.useEffect(() => {
     if (!fetched) {
       setLoading(true);
-      fetch('/api/productos')
+      fetch(`${import.meta.env.VITE_URL_API}/api/productos`)
         .then(res => {
           if (!res.ok) throw new Error('Error al obtener productos');
           return res.json();
@@ -281,15 +281,15 @@ function DropdownSearchPanel({ search, navigate, anchorRef }) {
   let top = 60, left = 0, width = 400;
   if (anchor) {
     const rect = anchor.getBoundingClientRect();
-    top = rect.bottom + window.scrollY + 6;
-    left = rect.left + window.scrollX;
+    top = rect.bottom + 6;
+    left = rect.left;
     width = rect.width;
   }
 
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top,
         left,
         width: Math.max(width, 360),
