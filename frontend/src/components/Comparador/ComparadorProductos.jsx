@@ -13,9 +13,9 @@ export default function ComparadorProductos({ productos, show, onHide, onRemove,
       setLoading(true);
       let url = '';
       if (categoria && subcategoria) {
-        url = `/api/productos?categoria=${encodeURIComponent(categoria)}&subcategoria=${encodeURIComponent(subcategoria)}`;
+        url = `${import.meta.env.VITE_URL_API}/api/productos?categoria=${encodeURIComponent(categoria)}&subcategoria=${encodeURIComponent(subcategoria)}`;
       } else {
-        url = `/api/productos`;
+        url = `${import.meta.env.VITE_URL_API}/api/productos`;
       }
       fetch(url)
         .then(res => res.json())

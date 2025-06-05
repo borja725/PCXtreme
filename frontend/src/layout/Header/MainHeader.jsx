@@ -250,7 +250,7 @@ function DropdownSearchPanel({ search, navigate, anchorRef }) {
   React.useEffect(() => {
     if (!fetched) {
       setLoading(true);
-      fetch('/api/productos')
+      fetch(`${import.meta.env.VITE_URL_API}/api/productos`)
         .then(res => {
           if (!res.ok) throw new Error('Error al obtener productos');
           return res.json();
